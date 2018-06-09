@@ -10,9 +10,11 @@ class CompressionTest(unittest.TestCase):
 
     def setUp(self):
         data = []
+        # TODO : select valid data to evaluate compression
         #data.append(np.random.rand(10))
         #data.append(np.random.rand(100))
         data.append(np.random.rand(10000))
+        data.append(np.random.rand(60, 1500))
         #data.append(''.join([random.choice(string.ascii_letters + string.digits) for i in range(100)]))
         data.append(''.join([random.choice(string.ascii_letters + string.digits) for i in range(1000)]))
         #data.append(np.random.rand(100000000))
