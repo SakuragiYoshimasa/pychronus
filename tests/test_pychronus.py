@@ -1,7 +1,7 @@
 # coding: utf-8
 import unittest
 import numpy as np
-from pychronus import Pychronus
+from pychronus.pychronus import Pychronus
 
 class PychronusTest(unittest.TestCase):
 

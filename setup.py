@@ -1,11 +1,5 @@
 from setuptools import setup, find_packages, Extension
 
-
-ext_modules = [
-    Extension('pychronus',
-              sources=['src/pychronus.py'])
-]
-
 setup(
     name='pychronus',
     version='0.0.1',
@@ -16,6 +10,6 @@ setup(
     install_requires=[],
     url='https://github.com/SakuragiYoshimasa/pychronus',
     license=license,
-    ext_modules=ext_modules,
+    packages=find_packages(exclude=('tests', 'docs')),
     test_suite='tests',
 )

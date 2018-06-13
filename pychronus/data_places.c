@@ -518,8 +518,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__pychronus
-#define __PYX_HAVE_API__pychronus
+#define __PYX_HAVE__pychronus__data_places
+#define __PYX_HAVE_API__pychronus__data_places
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -723,7 +723,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "src/pychronus.py",
+  "src/data_places.py",
 };
 
 /*--- Type declarations ---*/
@@ -823,119 +823,11 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
     const char* function_name);
 
-/* GetModuleGlobalName.proto */
-static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
-
-/* PyFunctionFastCall.proto */
-#if CYTHON_FAST_PYCALL
-#define __Pyx_PyFunction_FastCall(func, args, nargs)\
-    __Pyx_PyFunction_FastCallDict((func), (args), (nargs), NULL)
-#if 1 || PY_VERSION_HEX < 0x030600B1
-static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs);
-#else
-#define __Pyx_PyFunction_FastCallDict(func, args, nargs, kwargs) _PyFunction_FastCallDict(func, args, nargs, kwargs)
-#endif
-#endif
-
-/* PyCFunctionFastCall.proto */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
-#else
-#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
-#endif
-
 /* PyObjectCall.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
 #else
 #define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
-#endif
-
-/* PyObjectCallMethO.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
-#endif
-
-/* PyObjectCallOneArg.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
-
-/* PySequenceContains.proto */
-static CYTHON_INLINE int __Pyx_PySequence_ContainsTF(PyObject* item, PyObject* seq, int eq) {
-    int result = PySequence_Contains(seq, item);
-    return unlikely(result < 0) ? result : (result == (eq == Py_EQ));
-}
-
-/* PyThreadStateGet.proto */
-#if CYTHON_FAST_THREAD_STATE
-#define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
-#define __Pyx_PyThreadState_assign  __pyx_tstate = __Pyx_PyThreadState_Current;
-#define __Pyx_PyErr_Occurred()  __pyx_tstate->curexc_type
-#else
-#define __Pyx_PyThreadState_declare
-#define __Pyx_PyThreadState_assign
-#define __Pyx_PyErr_Occurred()  PyErr_Occurred()
-#endif
-
-/* PyErrFetchRestore.proto */
-#if CYTHON_FAST_THREAD_STATE
-#define __Pyx_PyErr_Clear() __Pyx_ErrRestore(NULL, NULL, NULL)
-#define __Pyx_ErrRestoreWithState(type, value, tb)  __Pyx_ErrRestoreInState(PyThreadState_GET(), type, value, tb)
-#define __Pyx_ErrFetchWithState(type, value, tb)    __Pyx_ErrFetchInState(PyThreadState_GET(), type, value, tb)
-#define __Pyx_ErrRestore(type, value, tb)  __Pyx_ErrRestoreInState(__pyx_tstate, type, value, tb)
-#define __Pyx_ErrFetch(type, value, tb)    __Pyx_ErrFetchInState(__pyx_tstate, type, value, tb)
-static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb);
-static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb);
-#if CYTHON_COMPILING_IN_CPYTHON
-#define __Pyx_PyErr_SetNone(exc) (Py_INCREF(exc), __Pyx_ErrRestore((exc), NULL, NULL))
-#else
-#define __Pyx_PyErr_SetNone(exc) PyErr_SetNone(exc)
-#endif
-#else
-#define __Pyx_PyErr_Clear() PyErr_Clear()
-#define __Pyx_PyErr_SetNone(exc) PyErr_SetNone(exc)
-#define __Pyx_ErrRestoreWithState(type, value, tb)  PyErr_Restore(type, value, tb)
-#define __Pyx_ErrFetchWithState(type, value, tb)  PyErr_Fetch(type, value, tb)
-#define __Pyx_ErrRestoreInState(tstate, type, value, tb)  PyErr_Restore(type, value, tb)
-#define __Pyx_ErrFetchInState(tstate, type, value, tb)  PyErr_Fetch(type, value, tb)
-#define __Pyx_ErrRestore(type, value, tb)  PyErr_Restore(type, value, tb)
-#define __Pyx_ErrFetch(type, value, tb)  PyErr_Fetch(type, value, tb)
-#endif
-
-/* RaiseException.proto */
-static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
-
-/* PyObjectSetAttrStr.proto */
-#if CYTHON_USE_TYPE_SLOTS
-#define __Pyx_PyObject_DelAttrStr(o,n) __Pyx_PyObject_SetAttrStr(o,n,NULL)
-static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
-    PyTypeObject* tp = Py_TYPE(obj);
-    if (likely(tp->tp_setattro))
-        return tp->tp_setattro(obj, attr_name, value);
-#if PY_MAJOR_VERSION < 3
-    if (likely(tp->tp_setattr))
-        return tp->tp_setattr(obj, PyString_AS_STRING(attr_name), value);
-#endif
-    return PyObject_SetAttr(obj, attr_name, value);
-}
-#else
-#define __Pyx_PyObject_DelAttrStr(o,n)   PyObject_DelAttr(o,n)
-#define __Pyx_PyObject_SetAttrStr(o,n,v) PyObject_SetAttr(o,n,v)
-#endif
-
-/* IncludeStringH.proto */
-#include <string.h>
-
-/* BytesEquals.proto */
-static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals);
-
-/* UnicodeEquals.proto */
-static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals);
-
-/* StrEquals.proto */
-#if PY_MAJOR_VERSION >= 3
-#define __Pyx_PyString_Equals __Pyx_PyUnicode_Equals
-#else
-#define __Pyx_PyString_Equals __Pyx_PyBytes_Equals
 #endif
 
 /* PyObjectLookupSpecial.proto */
@@ -964,11 +856,48 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_LookupSpecial(PyObject* obj, PyObj
 #define __Pyx_PyObject_LookupSpecial(o,n) __Pyx_PyObject_GetAttrStr(o,n)
 #endif
 
+/* PyCFunctionFastCall.proto */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
+#else
+#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
+#endif
+
+/* PyFunctionFastCall.proto */
+#if CYTHON_FAST_PYCALL
+#define __Pyx_PyFunction_FastCall(func, args, nargs)\
+    __Pyx_PyFunction_FastCallDict((func), (args), (nargs), NULL)
+#if 1 || PY_VERSION_HEX < 0x030600B1
+static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs);
+#else
+#define __Pyx_PyFunction_FastCallDict(func, args, nargs, kwargs) _PyFunction_FastCallDict(func, args, nargs, kwargs)
+#endif
+#endif
+
+/* PyObjectCallMethO.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
+#endif
+
+/* PyObjectCallOneArg.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
+
 /* PyObjectCallNoArg.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
 #else
 #define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
+#endif
+
+/* PyThreadStateGet.proto */
+#if CYTHON_FAST_THREAD_STATE
+#define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
+#define __Pyx_PyThreadState_assign  __pyx_tstate = __Pyx_PyThreadState_Current;
+#define __Pyx_PyErr_Occurred()  __pyx_tstate->curexc_type
+#else
+#define __Pyx_PyThreadState_declare
+#define __Pyx_PyThreadState_assign
+#define __Pyx_PyErr_Occurred()  PyErr_Occurred()
 #endif
 
 /* SaveResetException.proto */
@@ -989,6 +918,52 @@ static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject 
 #else
 static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb);
 #endif
+
+/* PyErrFetchRestore.proto */
+#if CYTHON_FAST_THREAD_STATE
+#define __Pyx_PyErr_Clear() __Pyx_ErrRestore(NULL, NULL, NULL)
+#define __Pyx_ErrRestoreWithState(type, value, tb)  __Pyx_ErrRestoreInState(PyThreadState_GET(), type, value, tb)
+#define __Pyx_ErrFetchWithState(type, value, tb)    __Pyx_ErrFetchInState(PyThreadState_GET(), type, value, tb)
+#define __Pyx_ErrRestore(type, value, tb)  __Pyx_ErrRestoreInState(__pyx_tstate, type, value, tb)
+#define __Pyx_ErrFetch(type, value, tb)    __Pyx_ErrFetchInState(__pyx_tstate, type, value, tb)
+static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb);
+static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb);
+#if CYTHON_COMPILING_IN_CPYTHON
+#define __Pyx_PyErr_SetNone(exc) (Py_INCREF(exc), __Pyx_ErrRestore((exc), NULL, NULL))
+#else
+#define __Pyx_PyErr_SetNone(exc) PyErr_SetNone(exc)
+#endif
+#else
+#define __Pyx_PyErr_Clear() PyErr_Clear()
+#define __Pyx_PyErr_SetNone(exc) PyErr_SetNone(exc)
+#define __Pyx_ErrRestoreWithState(type, value, tb)  PyErr_Restore(type, value, tb)
+#define __Pyx_ErrFetchWithState(type, value, tb)  PyErr_Fetch(type, value, tb)
+#define __Pyx_ErrRestoreInState(tstate, type, value, tb)  PyErr_Restore(type, value, tb)
+#define __Pyx_ErrFetchInState(tstate, type, value, tb)  PyErr_Fetch(type, value, tb)
+#define __Pyx_ErrRestore(type, value, tb)  PyErr_Restore(type, value, tb)
+#define __Pyx_ErrFetch(type, value, tb)  PyErr_Fetch(type, value, tb)
+#endif
+
+/* PyObjectSetAttrStr.proto */
+#if CYTHON_USE_TYPE_SLOTS
+#define __Pyx_PyObject_DelAttrStr(o,n) __Pyx_PyObject_SetAttrStr(o,n,NULL)
+static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
+    PyTypeObject* tp = Py_TYPE(obj);
+    if (likely(tp->tp_setattro))
+        return tp->tp_setattro(obj, attr_name, value);
+#if PY_MAJOR_VERSION < 3
+    if (likely(tp->tp_setattr))
+        return tp->tp_setattr(obj, PyString_AS_STRING(attr_name), value);
+#endif
+    return PyObject_SetAttr(obj, attr_name, value);
+}
+#else
+#define __Pyx_PyObject_DelAttrStr(o,n)   PyObject_DelAttr(o,n)
+#define __Pyx_PyObject_SetAttrStr(o,n,v) PyObject_SetAttr(o,n,v)
+#endif
+
+/* GetModuleGlobalName.proto */
+static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
 
 /* Import.proto */
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
@@ -1085,16 +1060,6 @@ static void __pyx_insert_code_object(int code_line, PyCodeObject* code_object);
 static void __Pyx_AddTraceback(const char *funcname, int c_line,
                                int py_line, const char *filename);
 
-/* Print.proto */
-static int __Pyx_Print(PyObject*, PyObject *, int);
-#if CYTHON_COMPILING_IN_PYPY || PY_MAJOR_VERSION >= 3
-static PyObject* __pyx_print = 0;
-static PyObject* __pyx_print_kwargs = 0;
-#endif
-
-/* PrintOne.proto */
-static int __Pyx_PrintOne(PyObject* stream, PyObject *o);
-
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
@@ -1123,1054 +1088,162 @@ static int __Pyx_check_binary_version(void);
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 
-/* Module declarations from 'pychronus' */
-#define __Pyx_MODULE_NAME "pychronus"
-extern int __pyx_module_is_main_pychronus;
-int __pyx_module_is_main_pychronus = 0;
+/* Module declarations from 'pychronus.data_places' */
+#define __Pyx_MODULE_NAME "pychronus.data_places"
+extern int __pyx_module_is_main_pychronus__data_places;
+int __pyx_module_is_main_pychronus__data_places = 0;
 
-/* Implementation of 'pychronus' */
-static PyObject *__pyx_builtin_ValueError;
+/* Implementation of 'pychronus.data_places' */
 static PyObject *__pyx_builtin_open;
-static const char __pyx_k_[] = "./";
 static const char __pyx_k_f[] = "f";
-static const char __pyx_k_p[] = "p";
 static const char __pyx_k_db[] = "db";
 static const char __pyx_k_rb[] = "rb";
 static const char __pyx_k_wb[] = "wb";
-static const char __pyx_k_bz2[] = "bz2";
 static const char __pyx_k_doc[] = "__doc__";
-static const char __pyx_k_end[] = "end";
 static const char __pyx_k_get[] = "get";
 static const char __pyx_k_mem[] = "mem";
 static const char __pyx_k_set[] = "set";
-static const char __pyx_k_zip[] = "zip";
 static const char __pyx_k_data[] = "data";
 static const char __pyx_k_exit[] = "__exit__";
-static const char __pyx_k_file[] = "file";
-static const char __pyx_k_gzip[] = "gzip";
-static const char __pyx_k_hoge[] = "hoge";
 static const char __pyx_k_host[] = "host";
 static const char __pyx_k_init[] = "__init__";
-static const char __pyx_k_load[] = "load";
 static const char __pyx_k_main[] = "__main__";
-static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_open[] = "open";
 static const char __pyx_k_port[] = "port";
 static const char __pyx_k_read[] = "read";
-static const char __pyx_k_save[] = "save";
 static const char __pyx_k_self[] = "self";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_Redis[] = "Redis";
-static const char __pyx_k_dumps[] = "dumps";
 static const char __pyx_k_enter[] = "__enter__";
-static const char __pyx_k_loads[] = "loads";
-static const char __pyx_k_place[] = "place";
-static const char __pyx_k_print[] = "print";
 static const char __pyx_k_redis[] = "redis";
 static const char __pyx_k_write[] = "write";
-static const char __pyx_k_data_2[] = "_data";
-static const char __pyx_k_delete[] = "delete";
+static const char __pyx_k_Memory[] = "Memory";
+static const char __pyx_k_Strage[] = "Strage";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_module[] = "__module__";
-static const char __pyx_k_pickle[] = "pickle";
 static const char __pyx_k_strage[] = "strage";
-static const char __pyx_k_update[] = "update";
 static const char __pyx_k_prepare[] = "__prepare__";
-static const char __pyx_k_compress[] = "compress";
-static const char __pyx_k_dataname[] = "dataname";
 static const char __pyx_k_filename[] = "filename";
 static const char __pyx_k_qualname[] = "__qualname__";
-static const char __pyx_k_Pychronus[] = "Pychronus";
+static const char __pyx_k_DataPlace[] = "DataPlace";
 static const char __pyx_k_localhost[] = "localhost";
 static const char __pyx_k_metaclass[] = "__metaclass__";
-static const char __pyx_k_pychronus[] = "pychronus";
-static const char __pyx_k_root_path[] = "root_path";
-static const char __pyx_k_serialize[] = "serialize";
-static const char __pyx_k_test_data[] = "test_data";
-static const char __pyx_k_ValueError[] = "ValueError";
-static const char __pyx_k_compressed[] = "compressed";
-static const char __pyx_k_decompress[] = "decompress";
-static const char __pyx_k_deserialize[] = "deserialize";
-static const char __pyx_k_memory_data[] = "memory_data";
+static const char __pyx_k_Redis_read[] = "Redis.read";
+static const char __pyx_k_Memory_read[] = "Memory.read";
+static const char __pyx_k_Redis_write[] = "Redis.write";
+static const char __pyx_k_Strage_read[] = "Strage.read";
+static const char __pyx_k_Memory_write[] = "Memory.write";
+static const char __pyx_k_Redis___init[] = "Redis.__init__";
+static const char __pyx_k_Strage_write[] = "Strage.write";
+static const char __pyx_k_Memory___init[] = "Memory.__init__";
 static const char __pyx_k_place_options[] = "place_options";
-static const char __pyx_k_Pychronus_load[] = "Pychronus.load";
-static const char __pyx_k_Pychronus_save[] = "Pychronus.save";
-static const char __pyx_k_compress_level[] = "compress_level";
-static const char __pyx_k_Pychronus___init[] = "Pychronus.__init__";
-static const char __pyx_k_Pychronus_delete[] = "Pychronus.delete";
-static const char __pyx_k_Pychronus_update[] = "Pychronus.update";
-static const char __pyx_k_compress_options[] = "compress_options";
-static const char __pyx_k_src_pychronus_py[] = "src/pychronus.py";
+static const char __pyx_k_DataPlace_read[] = "DataPlace.read";
+static const char __pyx_k_DataPlace_write[] = "DataPlace.write";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
-static const char __pyx_k_place_shuold_be_strage_mem_or_r[] = "'place' shuold be 'strage', 'mem', or 'redis'";
-static PyObject *__pyx_kp_s_;
-static PyObject *__pyx_n_s_Pychronus;
-static PyObject *__pyx_n_s_Pychronus___init;
-static PyObject *__pyx_n_s_Pychronus_delete;
-static PyObject *__pyx_n_s_Pychronus_load;
-static PyObject *__pyx_n_s_Pychronus_save;
-static PyObject *__pyx_n_s_Pychronus_update;
+static const char __pyx_k_src_data_places_py[] = "src/data_places.py";
+static const char __pyx_k_pychronus_data_places[] = "pychronus.data_places";
+static PyObject *__pyx_n_s_DataPlace;
+static PyObject *__pyx_n_s_DataPlace_read;
+static PyObject *__pyx_n_s_DataPlace_write;
+static PyObject *__pyx_n_s_Memory;
+static PyObject *__pyx_n_s_Memory___init;
+static PyObject *__pyx_n_s_Memory_read;
+static PyObject *__pyx_n_s_Memory_write;
 static PyObject *__pyx_n_s_Redis;
-static PyObject *__pyx_n_s_ValueError;
-static PyObject *__pyx_n_s_bz2;
+static PyObject *__pyx_n_s_Redis___init;
+static PyObject *__pyx_n_s_Redis_read;
+static PyObject *__pyx_n_s_Redis_write;
+static PyObject *__pyx_n_s_Strage;
+static PyObject *__pyx_n_s_Strage_read;
+static PyObject *__pyx_n_s_Strage_write;
 static PyObject *__pyx_n_s_cline_in_traceback;
-static PyObject *__pyx_n_s_compress;
-static PyObject *__pyx_n_s_compress_level;
-static PyObject *__pyx_n_s_compress_options;
-static PyObject *__pyx_n_s_compressed;
 static PyObject *__pyx_n_s_data;
-static PyObject *__pyx_n_s_data_2;
-static PyObject *__pyx_n_s_dataname;
 static PyObject *__pyx_n_s_db;
-static PyObject *__pyx_n_s_decompress;
-static PyObject *__pyx_n_s_delete;
-static PyObject *__pyx_n_s_deserialize;
 static PyObject *__pyx_n_s_doc;
-static PyObject *__pyx_n_s_dumps;
-static PyObject *__pyx_n_s_end;
 static PyObject *__pyx_n_s_enter;
 static PyObject *__pyx_n_s_exit;
 static PyObject *__pyx_n_s_f;
-static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_filename;
 static PyObject *__pyx_n_s_get;
-static PyObject *__pyx_n_s_gzip;
-static PyObject *__pyx_n_s_hoge;
 static PyObject *__pyx_n_s_host;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_init;
-static PyObject *__pyx_n_s_load;
-static PyObject *__pyx_n_s_loads;
 static PyObject *__pyx_n_s_localhost;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_mem;
-static PyObject *__pyx_n_s_memory_data;
 static PyObject *__pyx_n_s_metaclass;
 static PyObject *__pyx_n_s_module;
-static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_open;
-static PyObject *__pyx_n_s_p;
-static PyObject *__pyx_n_s_pickle;
-static PyObject *__pyx_n_s_place;
 static PyObject *__pyx_n_s_place_options;
-static PyObject *__pyx_kp_s_place_shuold_be_strage_mem_or_r;
 static PyObject *__pyx_n_s_port;
 static PyObject *__pyx_n_s_prepare;
-static PyObject *__pyx_n_s_print;
-static PyObject *__pyx_n_s_pychronus;
+static PyObject *__pyx_n_s_pychronus_data_places;
 static PyObject *__pyx_n_s_qualname;
 static PyObject *__pyx_n_s_rb;
 static PyObject *__pyx_n_s_read;
 static PyObject *__pyx_n_s_redis;
-static PyObject *__pyx_n_s_root_path;
-static PyObject *__pyx_n_s_save;
 static PyObject *__pyx_n_s_self;
-static PyObject *__pyx_n_s_serialize;
 static PyObject *__pyx_n_s_set;
-static PyObject *__pyx_kp_s_src_pychronus_py;
+static PyObject *__pyx_kp_s_src_data_places_py;
 static PyObject *__pyx_n_s_strage;
 static PyObject *__pyx_n_s_test;
-static PyObject *__pyx_n_s_test_data;
-static PyObject *__pyx_n_s_update;
 static PyObject *__pyx_n_s_wb;
 static PyObject *__pyx_n_s_write;
-static PyObject *__pyx_n_s_zip;
-static PyObject *__pyx_pf_9pychronus_compress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data, PyObject *__pyx_v_compressed, PyObject *__pyx_v_compress_level); /* proto */
-static PyObject *__pyx_pf_9pychronus_2decompress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data, PyObject *__pyx_v_compressed); /* proto */
-static PyObject *__pyx_pf_9pychronus_4serialize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_9pychronus_6deserialize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_9pychronus_9Pychronus___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_root_path, PyObject *__pyx_v_place, PyObject *__pyx_v_compressed, PyObject *__pyx_v_compress_level); /* proto */
-static PyObject *__pyx_pf_9pychronus_9Pychronus_2save(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_dataname); /* proto */
-static PyObject *__pyx_pf_9pychronus_9Pychronus_4load(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_dataname); /* proto */
-static PyObject *__pyx_pf_9pychronus_9Pychronus_6delete(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_dataname); /* proto */
-static PyObject *__pyx_pf_9pychronus_9Pychronus_8update(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_dataname); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_9DataPlace_write(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_data, CYTHON_UNUSED PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_9DataPlace_2read(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_6Strage_write(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_6Strage_2read(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_6Memory___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_6Memory_2write(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_6Memory_4read(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_5Redis___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_5Redis_2write(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_9pychronus_11data_places_5Redis_4read(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
 static PyObject *__pyx_int_0;
-static PyObject *__pyx_int_9;
 static PyObject *__pyx_int_6379;
+static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
-static PyObject *__pyx_tuple__4;
 static PyObject *__pyx_tuple__5;
 static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__15;
-static PyObject *__pyx_tuple__16;
-static PyObject *__pyx_tuple__18;
-static PyObject *__pyx_tuple__20;
-static PyObject *__pyx_tuple__22;
-static PyObject *__pyx_tuple__24;
-static PyObject *__pyx_tuple__25;
-static PyObject *__pyx_tuple__26;
+static PyObject *__pyx_tuple__17;
+static PyObject *__pyx_tuple__19;
+static PyObject *__pyx_tuple__21;
+static PyObject *__pyx_codeobj__4;
 static PyObject *__pyx_codeobj__6;
 static PyObject *__pyx_codeobj__8;
 static PyObject *__pyx_codeobj__10;
 static PyObject *__pyx_codeobj__12;
 static PyObject *__pyx_codeobj__14;
-static PyObject *__pyx_codeobj__17;
-static PyObject *__pyx_codeobj__19;
-static PyObject *__pyx_codeobj__21;
-static PyObject *__pyx_codeobj__23;
+static PyObject *__pyx_codeobj__16;
+static PyObject *__pyx_codeobj__18;
+static PyObject *__pyx_codeobj__20;
+static PyObject *__pyx_codeobj__22;
 
-/* "pychronus.py":11
- * compress_options = [None, 'gzip', 'bz2', 'zip']
+/* "src/data_places.py":7
  * 
- * def compress(data, compressed, compress_level):             # <<<<<<<<<<<<<<
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
+ * class DataPlace():
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         pass
+ *     def read(self, filename):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_1compress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_1compress = {"compress", (PyCFunction)__pyx_pw_9pychronus_1compress, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_1compress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_v_compressed = 0;
-  PyObject *__pyx_v_compress_level = 0;
+static PyObject *__pyx_pw_9pychronus_11data_places_9DataPlace_1write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_9DataPlace_1write = {"write", (PyCFunction)__pyx_pw_9pychronus_11data_places_9DataPlace_1write, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_9DataPlace_1write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  CYTHON_UNUSED PyObject *__pyx_v_self = 0;
+  CYTHON_UNUSED PyObject *__pyx_v_data = 0;
+  CYTHON_UNUSED PyObject *__pyx_v_filename = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("compress (wrapper)", 0);
+  __Pyx_RefNannySetupContext("write (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_data,&__pyx_n_s_compressed,&__pyx_n_s_compress_level,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_compressed)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 3, 3, 1); __PYX_ERR(0, 11, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_compress_level)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("compress", 1, 3, 3, 2); __PYX_ERR(0, 11, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compress") < 0)) __PYX_ERR(0, 11, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_data = values[0];
-    __pyx_v_compressed = values[1];
-    __pyx_v_compress_level = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compress", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 11, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_compress(__pyx_self, __pyx_v_data, __pyx_v_compressed, __pyx_v_compress_level);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9pychronus_compress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data, PyObject *__pyx_v_compressed, PyObject *__pyx_v_compress_level) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  __Pyx_RefNannySetupContext("compress", 0);
-
-  /* "pychronus.py":12
- * 
- * def compress(data, compressed, compress_level):
- *     return bz2.compress(data, compress_level) if compressed else data             # <<<<<<<<<<<<<<
- * 
- * def decompress(data, compressed):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_compressed); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 12, __pyx_L1_error)
-  if (__pyx_t_2) {
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_bz2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 12, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_compress); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 12, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    __pyx_t_6 = 0;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
-        __pyx_t_6 = 1;
-      }
-    }
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_5)) {
-      PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_data, __pyx_v_compress_level};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 12, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_GOTREF(__pyx_t_3);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-      PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_data, __pyx_v_compress_level};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 12, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_GOTREF(__pyx_t_3);
-    } else
-    #endif
-    {
-      __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 12, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      if (__pyx_t_4) {
-        __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4); __pyx_t_4 = NULL;
-      }
-      __Pyx_INCREF(__pyx_v_data);
-      __Pyx_GIVEREF(__pyx_v_data);
-      PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_6, __pyx_v_data);
-      __Pyx_INCREF(__pyx_v_compress_level);
-      __Pyx_GIVEREF(__pyx_v_compress_level);
-      PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_v_compress_level);
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 12, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    }
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_1 = __pyx_t_3;
-    __pyx_t_3 = 0;
-  } else {
-    __Pyx_INCREF(__pyx_v_data);
-    __pyx_t_1 = __pyx_v_data;
-  }
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pychronus.py":11
- * compress_options = [None, 'gzip', 'bz2', 'zip']
- * 
- * def compress(data, compressed, compress_level):             # <<<<<<<<<<<<<<
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("pychronus.compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pychronus.py":14
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
- * def decompress(data, compressed):             # <<<<<<<<<<<<<<
- *     return bz2.decompress(data) if compressed else data
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_3decompress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_3decompress = {"decompress", (PyCFunction)__pyx_pw_9pychronus_3decompress, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_3decompress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_v_compressed = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("decompress (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_data,&__pyx_n_s_compressed,0};
-    PyObject* values[2] = {0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_compressed)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("decompress", 1, 2, 2, 1); __PYX_ERR(0, 14, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "decompress") < 0)) __PYX_ERR(0, 14, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-    }
-    __pyx_v_data = values[0];
-    __pyx_v_compressed = values[1];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("decompress", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 14, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.decompress", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_2decompress(__pyx_self, __pyx_v_data, __pyx_v_compressed);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9pychronus_2decompress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data, PyObject *__pyx_v_compressed) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("decompress", 0);
-
-  /* "pychronus.py":15
- * 
- * def decompress(data, compressed):
- *     return bz2.decompress(data) if compressed else data             # <<<<<<<<<<<<<<
- * 
- * def serialize(data):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_compressed); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 15, __pyx_L1_error)
-  if (__pyx_t_2) {
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_bz2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_decompress); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
-      }
-    }
-    if (!__pyx_t_4) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-    } else {
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_data};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __Pyx_GOTREF(__pyx_t_3);
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_data};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __Pyx_GOTREF(__pyx_t_3);
-      } else
-      #endif
-      {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 15, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
-        __Pyx_INCREF(__pyx_v_data);
-        __Pyx_GIVEREF(__pyx_v_data);
-        PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_v_data);
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      }
-    }
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_1 = __pyx_t_3;
-    __pyx_t_3 = 0;
-  } else {
-    __Pyx_INCREF(__pyx_v_data);
-    __pyx_t_1 = __pyx_v_data;
-  }
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pychronus.py":14
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
- * def decompress(data, compressed):             # <<<<<<<<<<<<<<
- *     return bz2.decompress(data) if compressed else data
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pychronus.decompress", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pychronus.py":17
- *     return bz2.decompress(data) if compressed else data
- * 
- * def serialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.dumps(data)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_5serialize(PyObject *__pyx_self, PyObject *__pyx_v_data); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_5serialize = {"serialize", (PyCFunction)__pyx_pw_9pychronus_5serialize, METH_O, 0};
-static PyObject *__pyx_pw_9pychronus_5serialize(PyObject *__pyx_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("serialize (wrapper)", 0);
-  __pyx_r = __pyx_pf_9pychronus_4serialize(__pyx_self, ((PyObject *)__pyx_v_data));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9pychronus_4serialize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("serialize", 0);
-
-  /* "pychronus.py":18
- * 
- * def serialize(data):
- *     return pickle.dumps(data)             # <<<<<<<<<<<<<<
- * 
- * def deserialize(data):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_pickle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 18, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_dumps); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 18, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  if (!__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-  } else {
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_3)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_data};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_GOTREF(__pyx_t_1);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_data};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_GOTREF(__pyx_t_1);
-    } else
-    #endif
-    {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 18, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2); __pyx_t_2 = NULL;
-      __Pyx_INCREF(__pyx_v_data);
-      __Pyx_GIVEREF(__pyx_v_data);
-      PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_data);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    }
-  }
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pychronus.py":17
- *     return bz2.decompress(data) if compressed else data
- * 
- * def serialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.dumps(data)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pychronus.serialize", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pychronus.py":20
- *     return pickle.dumps(data)
- * 
- * def deserialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.loads(data)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_7deserialize(PyObject *__pyx_self, PyObject *__pyx_v_data); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_7deserialize = {"deserialize", (PyCFunction)__pyx_pw_9pychronus_7deserialize, METH_O, 0};
-static PyObject *__pyx_pw_9pychronus_7deserialize(PyObject *__pyx_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("deserialize (wrapper)", 0);
-  __pyx_r = __pyx_pf_9pychronus_6deserialize(__pyx_self, ((PyObject *)__pyx_v_data));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9pychronus_6deserialize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("deserialize", 0);
-
-  /* "pychronus.py":21
- * 
- * def deserialize(data):
- *     return pickle.loads(data)             # <<<<<<<<<<<<<<
- * 
- * class Pychronus():
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_pickle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_loads); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 21, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
-    }
-  }
-  if (!__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-  } else {
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_3)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_data};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_GOTREF(__pyx_t_1);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_data};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_GOTREF(__pyx_t_1);
-    } else
-    #endif
-    {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 21, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2); __pyx_t_2 = NULL;
-      __Pyx_INCREF(__pyx_v_data);
-      __Pyx_GIVEREF(__pyx_v_data);
-      PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_data);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    }
-  }
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pychronus.py":20
- *     return pickle.dumps(data)
- * 
- * def deserialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.loads(data)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pychronus.deserialize", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pychronus.py":30
- *     #   - 'redis': on redis
- * 
- *     def __init__(self, root_path='./', place='strage', compressed=True, compress_level=9):             # <<<<<<<<<<<<<<
- * 
- *         if place not in place_options:
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_9Pychronus_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_9Pychronus_1__init__ = {"__init__", (PyCFunction)__pyx_pw_9pychronus_9Pychronus_1__init__, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_9Pychronus_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_self = 0;
-  PyObject *__pyx_v_root_path = 0;
-  PyObject *__pyx_v_place = 0;
-  PyObject *__pyx_v_compressed = 0;
-  PyObject *__pyx_v_compress_level = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_root_path,&__pyx_n_s_place,&__pyx_n_s_compressed,&__pyx_n_s_compress_level,0};
-    PyObject* values[5] = {0,0,0,0,0};
-    values[1] = ((PyObject *)((PyObject*)__pyx_kp_s_));
-    values[2] = ((PyObject *)((PyObject*)__pyx_n_s_strage));
-    values[3] = ((PyObject *)((PyObject *)Py_True));
-    values[4] = ((PyObject *)((PyObject *)__pyx_int_9));
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-        CYTHON_FALLTHROUGH;
-        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-        CYTHON_FALLTHROUGH;
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_self)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (kw_args > 0) {
-          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_root_path);
-          if (value) { values[1] = value; kw_args--; }
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (kw_args > 0) {
-          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_place);
-          if (value) { values[2] = value; kw_args--; }
-        }
-        CYTHON_FALLTHROUGH;
-        case  3:
-        if (kw_args > 0) {
-          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_compressed);
-          if (value) { values[3] = value; kw_args--; }
-        }
-        CYTHON_FALLTHROUGH;
-        case  4:
-        if (kw_args > 0) {
-          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_compress_level);
-          if (value) { values[4] = value; kw_args--; }
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 30, __pyx_L3_error)
-      }
-    } else {
-      switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-        CYTHON_FALLTHROUGH;
-        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-        CYTHON_FALLTHROUGH;
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-    }
-    __pyx_v_self = values[0];
-    __pyx_v_root_path = values[1];
-    __pyx_v_place = values[2];
-    __pyx_v_compressed = values[3];
-    __pyx_v_compress_level = values[4];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 30, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.Pychronus.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_9Pychronus___init__(__pyx_self, __pyx_v_self, __pyx_v_root_path, __pyx_v_place, __pyx_v_compressed, __pyx_v_compress_level);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9pychronus_9Pychronus___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_root_path, PyObject *__pyx_v_place, PyObject *__pyx_v_compressed, PyObject *__pyx_v_compress_level) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_t_2;
-  int __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  __Pyx_RefNannySetupContext("__init__", 0);
-
-  /* "pychronus.py":32
- *     def __init__(self, root_path='./', place='strage', compressed=True, compress_level=9):
- * 
- *         if place not in place_options:             # <<<<<<<<<<<<<<
- *             raise ValueError("'place' shuold be 'strage', 'mem', or 'redis'")
- *         self.root_path = root_path
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_place_options); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_place, __pyx_t_1, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 32, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  if (__pyx_t_3) {
-
-    /* "pychronus.py":33
- * 
- *         if place not in place_options:
- *             raise ValueError("'place' shuold be 'strage', 'mem', or 'redis'")             # <<<<<<<<<<<<<<
- *         self.root_path = root_path
- *         self.place = place
- */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_Raise(__pyx_t_1, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 33, __pyx_L1_error)
-
-    /* "pychronus.py":32
- *     def __init__(self, root_path='./', place='strage', compressed=True, compress_level=9):
- * 
- *         if place not in place_options:             # <<<<<<<<<<<<<<
- *             raise ValueError("'place' shuold be 'strage', 'mem', or 'redis'")
- *         self.root_path = root_path
- */
-  }
-
-  /* "pychronus.py":34
- *         if place not in place_options:
- *             raise ValueError("'place' shuold be 'strage', 'mem', or 'redis'")
- *         self.root_path = root_path             # <<<<<<<<<<<<<<
- *         self.place = place
- *         self.compressed = compressed
- */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_root_path, __pyx_v_root_path) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
-
-  /* "pychronus.py":35
- *             raise ValueError("'place' shuold be 'strage', 'mem', or 'redis'")
- *         self.root_path = root_path
- *         self.place = place             # <<<<<<<<<<<<<<
- *         self.compressed = compressed
- *         self.compress_level = compress_level
- */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_place, __pyx_v_place) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
-
-  /* "pychronus.py":36
- *         self.root_path = root_path
- *         self.place = place
- *         self.compressed = compressed             # <<<<<<<<<<<<<<
- *         self.compress_level = compress_level
- *         self.memory_data = {}
- */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_compressed, __pyx_v_compressed) < 0) __PYX_ERR(0, 36, __pyx_L1_error)
-
-  /* "pychronus.py":37
- *         self.place = place
- *         self.compressed = compressed
- *         self.compress_level = compress_level             # <<<<<<<<<<<<<<
- *         self.memory_data = {}
- *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
- */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_compress_level, __pyx_v_compress_level) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
-
-  /* "pychronus.py":38
- *         self.compressed = compressed
- *         self.compress_level = compress_level
- *         self.memory_data = {}             # <<<<<<<<<<<<<<
- *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
- * 
- */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_memory_data, __pyx_t_1) < 0) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":39
- *         self.compress_level = compress_level
- *         self.memory_data = {}
- *         self.redis = redis.Redis(host='localhost', port=6379, db=0)             # <<<<<<<<<<<<<<
- * 
- *     def save(self, data, dataname):
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_redis); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_Redis); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_host, __pyx_n_s_localhost) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_port, __pyx_int_6379) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_db, __pyx_int_0) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_redis, __pyx_t_5) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
-  /* "pychronus.py":30
- *     #   - 'redis': on redis
- * 
- *     def __init__(self, root_path='./', place='strage', compressed=True, compress_level=9):             # <<<<<<<<<<<<<<
- * 
- *         if place not in place_options:
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("pychronus.Pychronus.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pychronus.py":41
- *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
- * 
- *     def save(self, data, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_9Pychronus_3save(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_9Pychronus_3save = {"save", (PyCFunction)__pyx_pw_9pychronus_9Pychronus_3save, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_9Pychronus_3save(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_self = 0;
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_v_dataname = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("save (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_data,&__pyx_n_s_dataname,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_data,&__pyx_n_s_filename,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2194,17 +1267,17 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_3save(PyObject *__pyx_self, PyOb
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("save", 1, 3, 3, 1); __PYX_ERR(0, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 1); __PYX_ERR(0, 7, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_dataname)) != 0)) kw_args--;
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("save", 1, 3, 3, 2); __PYX_ERR(0, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 2); __PYX_ERR(0, 7, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "save") < 0)) __PYX_ERR(0, 41, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "write") < 0)) __PYX_ERR(0, 7, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -2215,569 +1288,54 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_3save(PyObject *__pyx_self, PyOb
     }
     __pyx_v_self = values[0];
     __pyx_v_data = values[1];
-    __pyx_v_dataname = values[2];
+    __pyx_v_filename = values[2];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("save", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 41, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 7, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.Pychronus.save", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pychronus.data_places.DataPlace.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_9Pychronus_2save(__pyx_self, __pyx_v_self, __pyx_v_data, __pyx_v_dataname);
+  __pyx_r = __pyx_pf_9pychronus_11data_places_9DataPlace_write(__pyx_self, __pyx_v_self, __pyx_v_data, __pyx_v_filename);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9pychronus_9Pychronus_2save(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_dataname) {
-  PyObject *__pyx_v_filename = NULL;
-  PyObject *__pyx_v_place = NULL;
-  PyObject *__pyx_v__data = NULL;
-  PyObject *__pyx_v_f = NULL;
+static PyObject *__pyx_pf_9pychronus_11data_places_9DataPlace_write(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_data, CYTHON_UNUSED PyObject *__pyx_v_filename) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  int __pyx_t_8;
-  PyObject *__pyx_t_9 = NULL;
-  PyObject *__pyx_t_10 = NULL;
-  PyObject *__pyx_t_11 = NULL;
-  PyObject *__pyx_t_12 = NULL;
-  PyObject *__pyx_t_13 = NULL;
-  int __pyx_t_14;
-  __Pyx_RefNannySetupContext("save", 0);
-
-  /* "pychronus.py":42
- * 
- *     def save(self, data, dataname):
- *         filename = self.root_path + dataname             # <<<<<<<<<<<<<<
- *         place = self.place
- *         _data = serialize(data)
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_root_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_dataname); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_filename = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "pychronus.py":43
- *     def save(self, data, dataname):
- *         filename = self.root_path + dataname
- *         place = self.place             # <<<<<<<<<<<<<<
- *         _data = serialize(data)
- *         _data = compress(_data, self.compressed, self.compress_level)
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_place); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_v_place = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "pychronus.py":44
- *         filename = self.root_path + dataname
- *         place = self.place
- *         _data = serialize(data)             # <<<<<<<<<<<<<<
- *         _data = compress(_data, self.compressed, self.compress_level)
- *         if place == 'strage':
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_serialize); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-    }
-  }
-  if (!__pyx_t_3) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_data); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-  } else {
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_1)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_data};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_GOTREF(__pyx_t_2);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_data};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_GOTREF(__pyx_t_2);
-    } else
-    #endif
-    {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 44, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
-      __Pyx_INCREF(__pyx_v_data);
-      __Pyx_GIVEREF(__pyx_v_data);
-      PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_data);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    }
-  }
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v__data = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "pychronus.py":45
- *         place = self.place
- *         _data = serialize(data)
- *         _data = compress(_data, self.compressed, self.compress_level)             # <<<<<<<<<<<<<<
- *         if place == 'strage':
- *             with open(filename, 'wb') as f:
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_compress); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_compressed); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 45, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_compress_level); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = NULL;
-  __pyx_t_6 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_1, function);
-      __pyx_t_6 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_1)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_5, __pyx_v__data, __pyx_t_4, __pyx_t_3};
-    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 3+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_5, __pyx_v__data, __pyx_t_4, __pyx_t_3};
-    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 3+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_7 = PyTuple_New(3+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    if (__pyx_t_5) {
-      __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
-    }
-    __Pyx_INCREF(__pyx_v__data);
-    __Pyx_GIVEREF(__pyx_v__data);
-    PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_6, __pyx_v__data);
-    __Pyx_GIVEREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_7, 2+__pyx_t_6, __pyx_t_3);
-    __pyx_t_4 = 0;
-    __pyx_t_3 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF_SET(__pyx_v__data, __pyx_t_2);
-  __pyx_t_2 = 0;
-
-  /* "pychronus.py":46
- *         _data = serialize(data)
- *         _data = compress(_data, self.compressed, self.compress_level)
- *         if place == 'strage':             # <<<<<<<<<<<<<<
- *             with open(filename, 'wb') as f:
- *                 f.write(_data)
- */
-  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_v_place, __pyx_n_s_strage, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 46, __pyx_L1_error)
-  if (__pyx_t_8) {
-
-    /* "pychronus.py":47
- *         _data = compress(_data, self.compressed, self.compress_level)
- *         if place == 'strage':
- *             with open(filename, 'wb') as f:             # <<<<<<<<<<<<<<
- *                 f.write(_data)
- * 
- */
-    /*with:*/ {
-      __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_INCREF(__pyx_v_filename);
-      __Pyx_GIVEREF(__pyx_v_filename);
-      PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_filename);
-      __Pyx_INCREF(__pyx_n_s_wb);
-      __Pyx_GIVEREF(__pyx_n_s_wb);
-      PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_wb);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_9 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_exit); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 47, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_7 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_enter); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_3 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_3)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_3);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-        }
-      }
-      if (__pyx_t_3) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L4_error)
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L4_error)
-      }
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __pyx_t_2;
-      __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      /*try:*/ {
-        {
-          __Pyx_PyThreadState_declare
-          __Pyx_PyThreadState_assign
-          __Pyx_ExceptionSave(&__pyx_t_10, &__pyx_t_11, &__pyx_t_12);
-          __Pyx_XGOTREF(__pyx_t_10);
-          __Pyx_XGOTREF(__pyx_t_11);
-          __Pyx_XGOTREF(__pyx_t_12);
-          /*try:*/ {
-            __pyx_v_f = __pyx_t_7;
-            __pyx_t_7 = 0;
-
-            /* "pychronus.py":48
- *         if place == 'strage':
- *             with open(filename, 'wb') as f:
- *                 f.write(_data)             # <<<<<<<<<<<<<<
- * 
- *         elif place == 'mem':
- */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_f, __pyx_n_s_write); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L8_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_2 = NULL;
-            if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-              __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
-              if (likely(__pyx_t_2)) {
-                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-                __Pyx_INCREF(__pyx_t_2);
-                __Pyx_INCREF(function);
-                __Pyx_DECREF_SET(__pyx_t_1, function);
-              }
-            }
-            if (!__pyx_t_2) {
-              __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v__data); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L8_error)
-              __Pyx_GOTREF(__pyx_t_7);
-            } else {
-              #if CYTHON_FAST_PYCALL
-              if (PyFunction_Check(__pyx_t_1)) {
-                PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v__data};
-                __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L8_error)
-                __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-                __Pyx_GOTREF(__pyx_t_7);
-              } else
-              #endif
-              #if CYTHON_FAST_PYCCALL
-              if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-                PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v__data};
-                __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L8_error)
-                __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-                __Pyx_GOTREF(__pyx_t_7);
-              } else
-              #endif
-              {
-                __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L8_error)
-                __Pyx_GOTREF(__pyx_t_3);
-                __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2); __pyx_t_2 = NULL;
-                __Pyx_INCREF(__pyx_v__data);
-                __Pyx_GIVEREF(__pyx_v__data);
-                PyTuple_SET_ITEM(__pyx_t_3, 0+1, __pyx_v__data);
-                __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L8_error)
-                __Pyx_GOTREF(__pyx_t_7);
-                __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-              }
-            }
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-            /* "pychronus.py":47
- *         _data = compress(_data, self.compressed, self.compress_level)
- *         if place == 'strage':
- *             with open(filename, 'wb') as f:             # <<<<<<<<<<<<<<
- *                 f.write(_data)
- * 
- */
-          }
-          __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-          __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-          goto __pyx_L13_try_end;
-          __pyx_L8_error:;
-          __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-          /*except:*/ {
-            __Pyx_AddTraceback("pychronus.Pychronus.save", __pyx_clineno, __pyx_lineno, __pyx_filename);
-            if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_1, &__pyx_t_3) < 0) __PYX_ERR(0, 47, __pyx_L10_except_error)
-            __Pyx_GOTREF(__pyx_t_7);
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_2 = PyTuple_Pack(3, __pyx_t_7, __pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L10_except_error)
-            __Pyx_GOTREF(__pyx_t_2);
-            __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_2, NULL);
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-            if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 47, __pyx_L10_except_error)
-            __Pyx_GOTREF(__pyx_t_13);
-            __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_13);
-            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            if (__pyx_t_8 < 0) __PYX_ERR(0, 47, __pyx_L10_except_error)
-            __pyx_t_14 = ((!(__pyx_t_8 != 0)) != 0);
-            if (__pyx_t_14) {
-              __Pyx_GIVEREF(__pyx_t_7);
-              __Pyx_GIVEREF(__pyx_t_1);
-              __Pyx_XGIVEREF(__pyx_t_3);
-              __Pyx_ErrRestoreWithState(__pyx_t_7, __pyx_t_1, __pyx_t_3);
-              __pyx_t_7 = 0; __pyx_t_1 = 0; __pyx_t_3 = 0; 
-              __PYX_ERR(0, 47, __pyx_L10_except_error)
-            }
-            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-            goto __pyx_L9_exception_handled;
-          }
-          __pyx_L10_except_error:;
-          __Pyx_XGIVEREF(__pyx_t_10);
-          __Pyx_XGIVEREF(__pyx_t_11);
-          __Pyx_XGIVEREF(__pyx_t_12);
-          __Pyx_ExceptionReset(__pyx_t_10, __pyx_t_11, __pyx_t_12);
-          goto __pyx_L1_error;
-          __pyx_L9_exception_handled:;
-          __Pyx_XGIVEREF(__pyx_t_10);
-          __Pyx_XGIVEREF(__pyx_t_11);
-          __Pyx_XGIVEREF(__pyx_t_12);
-          __Pyx_ExceptionReset(__pyx_t_10, __pyx_t_11, __pyx_t_12);
-          __pyx_L13_try_end:;
-        }
-      }
-      /*finally:*/ {
-        /*normal exit:*/{
-          if (__pyx_t_9) {
-            __pyx_t_12 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_tuple__3, NULL);
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-            if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 47, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_12);
-            __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-          }
-          goto __pyx_L7;
-        }
-        __pyx_L7:;
-      }
-      goto __pyx_L17;
-      __pyx_L4_error:;
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      goto __pyx_L1_error;
-      __pyx_L17:;
-    }
-
-    /* "pychronus.py":46
- *         _data = serialize(data)
- *         _data = compress(_data, self.compressed, self.compress_level)
- *         if place == 'strage':             # <<<<<<<<<<<<<<
- *             with open(filename, 'wb') as f:
- *                 f.write(_data)
- */
-    goto __pyx_L3;
-  }
-
-  /* "pychronus.py":50
- *                 f.write(_data)
- * 
- *         elif place == 'mem':             # <<<<<<<<<<<<<<
- *             self.memory_data[filename] = _data
- * 
- */
-  __pyx_t_14 = (__Pyx_PyString_Equals(__pyx_v_place, __pyx_n_s_mem, Py_EQ)); if (unlikely(__pyx_t_14 < 0)) __PYX_ERR(0, 50, __pyx_L1_error)
-  if (__pyx_t_14) {
-
-    /* "pychronus.py":51
- * 
- *         elif place == 'mem':
- *             self.memory_data[filename] = _data             # <<<<<<<<<<<<<<
- * 
- *         elif place == 'redis':
- */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_memory_data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(PyObject_SetItem(__pyx_t_3, __pyx_v_filename, __pyx_v__data) < 0)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "pychronus.py":50
- *                 f.write(_data)
- * 
- *         elif place == 'mem':             # <<<<<<<<<<<<<<
- *             self.memory_data[filename] = _data
- * 
- */
-    goto __pyx_L3;
-  }
-
-  /* "pychronus.py":53
- *             self.memory_data[filename] = _data
- * 
- *         elif place == 'redis':             # <<<<<<<<<<<<<<
- *             self.redis.set(filename, _data)
- * 
- */
-  __pyx_t_14 = (__Pyx_PyString_Equals(__pyx_v_place, __pyx_n_s_redis, Py_EQ)); if (unlikely(__pyx_t_14 < 0)) __PYX_ERR(0, 53, __pyx_L1_error)
-  if (__pyx_t_14) {
-
-    /* "pychronus.py":54
- * 
- *         elif place == 'redis':
- *             self.redis.set(filename, _data)             # <<<<<<<<<<<<<<
- * 
- *     def load(self, dataname):
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_redis); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_set); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = NULL;
-    __pyx_t_6 = 0;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_7);
-      if (likely(__pyx_t_1)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-        __Pyx_INCREF(__pyx_t_1);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_7, function);
-        __pyx_t_6 = 1;
-      }
-    }
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_7)) {
-      PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_v_filename, __pyx_v__data};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_GOTREF(__pyx_t_3);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-      PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_v_filename, __pyx_v__data};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_GOTREF(__pyx_t_3);
-    } else
-    #endif
-    {
-      __pyx_t_2 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      if (__pyx_t_1) {
-        __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1); __pyx_t_1 = NULL;
-      }
-      __Pyx_INCREF(__pyx_v_filename);
-      __Pyx_GIVEREF(__pyx_v_filename);
-      PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_6, __pyx_v_filename);
-      __Pyx_INCREF(__pyx_v__data);
-      __Pyx_GIVEREF(__pyx_v__data);
-      PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_6, __pyx_v__data);
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    }
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "pychronus.py":53
- *             self.memory_data[filename] = _data
- * 
- *         elif place == 'redis':             # <<<<<<<<<<<<<<
- *             self.redis.set(filename, _data)
- * 
- */
-  }
-  __pyx_L3:;
-
-  /* "pychronus.py":41
- *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
- * 
- *     def save(self, data, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
- */
+  __Pyx_RefNannySetupContext("write", 0);
 
   /* function exit code */
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("pychronus.Pychronus.save", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_filename);
-  __Pyx_XDECREF(__pyx_v_place);
-  __Pyx_XDECREF(__pyx_v__data);
-  __Pyx_XDECREF(__pyx_v_f);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pychronus.py":56
- *             self.redis.set(filename, _data)
+/* "src/data_places.py":9
+ *     def write(self, data, filename):
+ *         pass
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         pass
  * 
- *     def load(self, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_9Pychronus_5load(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_9Pychronus_5load = {"load", (PyCFunction)__pyx_pw_9pychronus_9Pychronus_5load, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_9Pychronus_5load(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_self = 0;
-  PyObject *__pyx_v_dataname = 0;
+static PyObject *__pyx_pw_9pychronus_11data_places_9DataPlace_3read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_9DataPlace_3read = {"read", (PyCFunction)__pyx_pw_9pychronus_11data_places_9DataPlace_3read, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_9DataPlace_3read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  CYTHON_UNUSED PyObject *__pyx_v_self = 0;
+  CYTHON_UNUSED PyObject *__pyx_v_filename = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("load (wrapper)", 0);
+  __Pyx_RefNannySetupContext("read (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_dataname,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_filename,0};
     PyObject* values[2] = {0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2797,13 +1355,13 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_5load(PyObject *__pyx_self, PyOb
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_dataname)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("load", 1, 2, 2, 1); __PYX_ERR(0, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, 1); __PYX_ERR(0, 9, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "load") < 0)) __PYX_ERR(0, 56, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read") < 0)) __PYX_ERR(0, 9, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2812,556 +1370,368 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_5load(PyObject *__pyx_self, PyOb
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_self = values[0];
-    __pyx_v_dataname = values[1];
+    __pyx_v_filename = values[1];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("load", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 56, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 9, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.Pychronus.load", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pychronus.data_places.DataPlace.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_9Pychronus_4load(__pyx_self, __pyx_v_self, __pyx_v_dataname);
+  __pyx_r = __pyx_pf_9pychronus_11data_places_9DataPlace_2read(__pyx_self, __pyx_v_self, __pyx_v_filename);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9pychronus_9Pychronus_4load(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_dataname) {
-  PyObject *__pyx_v_filename = NULL;
-  PyObject *__pyx_v_place = NULL;
-  PyObject *__pyx_v__data = NULL;
+static PyObject *__pyx_pf_9pychronus_11data_places_9DataPlace_2read(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_filename) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("read", 0);
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/data_places.py":13
+ * 
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         with open(filename, 'wb') as f:
+ *             f.write(data)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9pychronus_11data_places_6Strage_1write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_6Strage_1write = {"write", (PyCFunction)__pyx_pw_9pychronus_11data_places_6Strage_1write, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_6Strage_1write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  CYTHON_UNUSED PyObject *__pyx_v_self = 0;
+  PyObject *__pyx_v_data = 0;
+  PyObject *__pyx_v_filename = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("write (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_data,&__pyx_n_s_filename,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_self)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 1); __PYX_ERR(0, 13, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 2); __PYX_ERR(0, 13, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "write") < 0)) __PYX_ERR(0, 13, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_self = values[0];
+    __pyx_v_data = values[1];
+    __pyx_v_filename = values[2];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 13, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pychronus.data_places.Strage.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_9pychronus_11data_places_6Strage_write(__pyx_self, __pyx_v_self, __pyx_v_data, __pyx_v_filename);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9pychronus_11data_places_6Strage_write(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_filename) {
   PyObject *__pyx_v_f = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
-  int __pyx_t_3;
+  PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
   PyObject *__pyx_t_8 = NULL;
   PyObject *__pyx_t_9 = NULL;
-  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_10;
   int __pyx_t_11;
-  int __pyx_t_12;
-  PyObject *__pyx_t_13 = NULL;
-  __Pyx_RefNannySetupContext("load", 0);
+  __Pyx_RefNannySetupContext("write", 0);
 
-  /* "pychronus.py":57
- * 
- *     def load(self, dataname):
- *         filename = self.root_path + dataname             # <<<<<<<<<<<<<<
- *         place = self.place
- *         _data = None
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_root_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 57, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_dataname); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 57, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_filename = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "pychronus.py":58
- *     def load(self, dataname):
- *         filename = self.root_path + dataname
- *         place = self.place             # <<<<<<<<<<<<<<
- *         _data = None
+  /* "src/data_places.py":14
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):
+ *         with open(filename, 'wb') as f:             # <<<<<<<<<<<<<<
+ *             f.write(data)
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_place); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_v_place = __pyx_t_2;
-  __pyx_t_2 = 0;
-
-  /* "pychronus.py":59
- *         filename = self.root_path + dataname
- *         place = self.place
- *         _data = None             # <<<<<<<<<<<<<<
- * 
- *         if place == 'strage':
- */
-  __Pyx_INCREF(Py_None);
-  __pyx_v__data = Py_None;
-
-  /* "pychronus.py":61
- *         _data = None
- * 
- *         if place == 'strage':             # <<<<<<<<<<<<<<
- *             with open(filename, 'rb') as f:
- *                 _data = f.read()
- */
-  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_place, __pyx_n_s_strage, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 61, __pyx_L1_error)
-  if (__pyx_t_3) {
-
-    /* "pychronus.py":62
- * 
- *         if place == 'strage':
- *             with open(filename, 'rb') as f:             # <<<<<<<<<<<<<<
- *                 _data = f.read()
- * 
- */
-    /*with:*/ {
-      __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_INCREF(__pyx_v_filename);
-      __Pyx_GIVEREF(__pyx_v_filename);
-      PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_filename);
-      __Pyx_INCREF(__pyx_n_s_rb);
-      __Pyx_GIVEREF(__pyx_n_s_rb);
-      PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_rb);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_exit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 62, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_enter); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L4_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_6 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-        __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-        if (likely(__pyx_t_6)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-          __Pyx_INCREF(__pyx_t_6);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_5, function);
-        }
-      }
-      if (__pyx_t_6) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L4_error)
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L4_error)
-      }
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __pyx_t_2;
-      __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      /*try:*/ {
-        {
-          __Pyx_PyThreadState_declare
-          __Pyx_PyThreadState_assign
-          __Pyx_ExceptionSave(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
-          __Pyx_XGOTREF(__pyx_t_7);
-          __Pyx_XGOTREF(__pyx_t_8);
-          __Pyx_XGOTREF(__pyx_t_9);
-          /*try:*/ {
-            __pyx_v_f = __pyx_t_5;
-            __pyx_t_5 = 0;
-
-            /* "pychronus.py":63
- *         if place == 'strage':
- *             with open(filename, 'rb') as f:
- *                 _data = f.read()             # <<<<<<<<<<<<<<
- * 
- *         elif place == 'mem':
- */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_f, __pyx_n_s_read); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L8_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_2 = NULL;
-            if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-              __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
-              if (likely(__pyx_t_2)) {
-                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-                __Pyx_INCREF(__pyx_t_2);
-                __Pyx_INCREF(function);
-                __Pyx_DECREF_SET(__pyx_t_1, function);
-              }
-            }
-            if (__pyx_t_2) {
-              __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 63, __pyx_L8_error)
-              __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-            } else {
-              __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 63, __pyx_L8_error)
-            }
-            __Pyx_GOTREF(__pyx_t_5);
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __Pyx_DECREF_SET(__pyx_v__data, __pyx_t_5);
-            __pyx_t_5 = 0;
-
-            /* "pychronus.py":62
- * 
- *         if place == 'strage':
- *             with open(filename, 'rb') as f:             # <<<<<<<<<<<<<<
- *                 _data = f.read()
- * 
- */
-          }
-          __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-          __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-          goto __pyx_L13_try_end;
-          __pyx_L8_error:;
-          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-          __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-          /*except:*/ {
-            __Pyx_AddTraceback("pychronus.Pychronus.load", __pyx_clineno, __pyx_lineno, __pyx_filename);
-            if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_1, &__pyx_t_2) < 0) __PYX_ERR(0, 62, __pyx_L10_except_error)
-            __Pyx_GOTREF(__pyx_t_5);
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_GOTREF(__pyx_t_2);
-            __pyx_t_6 = PyTuple_Pack(3, __pyx_t_5, __pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 62, __pyx_L10_except_error)
-            __Pyx_GOTREF(__pyx_t_6);
-            __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL);
-            __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-            if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 62, __pyx_L10_except_error)
-            __Pyx_GOTREF(__pyx_t_10);
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_10);
-            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            if (__pyx_t_3 < 0) __PYX_ERR(0, 62, __pyx_L10_except_error)
-            __pyx_t_11 = ((!(__pyx_t_3 != 0)) != 0);
-            if (__pyx_t_11) {
-              __Pyx_GIVEREF(__pyx_t_5);
-              __Pyx_GIVEREF(__pyx_t_1);
-              __Pyx_XGIVEREF(__pyx_t_2);
-              __Pyx_ErrRestoreWithState(__pyx_t_5, __pyx_t_1, __pyx_t_2);
-              __pyx_t_5 = 0; __pyx_t_1 = 0; __pyx_t_2 = 0; 
-              __PYX_ERR(0, 62, __pyx_L10_except_error)
-            }
-            __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-            goto __pyx_L9_exception_handled;
-          }
-          __pyx_L10_except_error:;
-          __Pyx_XGIVEREF(__pyx_t_7);
-          __Pyx_XGIVEREF(__pyx_t_8);
-          __Pyx_XGIVEREF(__pyx_t_9);
-          __Pyx_ExceptionReset(__pyx_t_7, __pyx_t_8, __pyx_t_9);
-          goto __pyx_L1_error;
-          __pyx_L9_exception_handled:;
-          __Pyx_XGIVEREF(__pyx_t_7);
-          __Pyx_XGIVEREF(__pyx_t_8);
-          __Pyx_XGIVEREF(__pyx_t_9);
-          __Pyx_ExceptionReset(__pyx_t_7, __pyx_t_8, __pyx_t_9);
-          __pyx_L13_try_end:;
-        }
-      }
-      /*finally:*/ {
-        /*normal exit:*/{
-          if (__pyx_t_4) {
-            __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__4, NULL);
-            __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 62, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_9);
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          }
-          goto __pyx_L7;
-        }
-        __pyx_L7:;
-      }
-      goto __pyx_L17;
-      __pyx_L4_error:;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      goto __pyx_L1_error;
-      __pyx_L17:;
-    }
-
-    /* "pychronus.py":61
- *         _data = None
- * 
- *         if place == 'strage':             # <<<<<<<<<<<<<<
- *             with open(filename, 'rb') as f:
- *                 _data = f.read()
- */
-    goto __pyx_L3;
-  }
-
-  /* "pychronus.py":65
- *                 _data = f.read()
- * 
- *         elif place == 'mem':             # <<<<<<<<<<<<<<
- *             _data = self.memory_data[filename]
- * 
- */
-  __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_v_place, __pyx_n_s_mem, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
-  if (__pyx_t_11) {
-
-    /* "pychronus.py":66
- * 
- *         elif place == 'mem':
- *             _data = self.memory_data[filename]             # <<<<<<<<<<<<<<
- * 
- *         elif place == 'redis':
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_memory_data); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyObject_GetItem(__pyx_t_2, __pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+  /*with:*/ {
+    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF_SET(__pyx_v__data, __pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "pychronus.py":65
- *                 _data = f.read()
- * 
- *         elif place == 'mem':             # <<<<<<<<<<<<<<
- *             _data = self.memory_data[filename]
- * 
- */
-    goto __pyx_L3;
-  }
-
-  /* "pychronus.py":68
- *             _data = self.memory_data[filename]
- * 
- *         elif place == 'redis':             # <<<<<<<<<<<<<<
- *             _data = self.redis.get(filename)
- * 
- */
-  __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_v_place, __pyx_n_s_redis, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 68, __pyx_L1_error)
-  if (__pyx_t_11) {
-
-    /* "pychronus.py":69
- * 
- *         elif place == 'redis':
- *             _data = self.redis.get(filename)             # <<<<<<<<<<<<<<
- * 
- *         _data = decompress(_data, self.compressed)
- */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_redis); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __Pyx_INCREF(__pyx_v_filename);
+    __Pyx_GIVEREF(__pyx_v_filename);
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_filename);
+    __Pyx_INCREF(__pyx_n_s_wb);
+    __Pyx_GIVEREF(__pyx_n_s_wb);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_wb);
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_get); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 69, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_2)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_3 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_exit); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 14, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_enter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 14, __pyx_L3_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_5)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        __Pyx_INCREF(__pyx_t_5);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
       }
     }
-    if (!__pyx_t_2) {
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
+    if (__pyx_t_5) {
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L3_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     } else {
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_filename};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_filename};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-      } else
-      #endif
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L3_error)
+    }
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __pyx_t_1;
+    __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    /*try:*/ {
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2); __pyx_t_2 = NULL;
-        __Pyx_INCREF(__pyx_v_filename);
-        __Pyx_GIVEREF(__pyx_v_filename);
-        PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_v_filename);
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_PyThreadState_declare
+        __Pyx_PyThreadState_assign
+        __Pyx_ExceptionSave(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+        __Pyx_XGOTREF(__pyx_t_6);
+        __Pyx_XGOTREF(__pyx_t_7);
+        __Pyx_XGOTREF(__pyx_t_8);
+        /*try:*/ {
+          __pyx_v_f = __pyx_t_4;
+          __pyx_t_4 = 0;
+
+          /* "src/data_places.py":15
+ *     def write(self, data, filename):
+ *         with open(filename, 'wb') as f:
+ *             f.write(data)             # <<<<<<<<<<<<<<
+ * 
+ *     def read(self, filename):
+ */
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_f, __pyx_n_s_write); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __pyx_t_1 = NULL;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+            __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
+            if (likely(__pyx_t_1)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+              __Pyx_INCREF(__pyx_t_1);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_2, function);
+            }
+          }
+          if (!__pyx_t_1) {
+            __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_data); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 15, __pyx_L7_error)
+            __Pyx_GOTREF(__pyx_t_4);
+          } else {
+            #if CYTHON_FAST_PYCALL
+            if (PyFunction_Check(__pyx_t_2)) {
+              PyObject *__pyx_temp[2] = {__pyx_t_1, __pyx_v_data};
+              __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 15, __pyx_L7_error)
+              __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __Pyx_GOTREF(__pyx_t_4);
+            } else
+            #endif
+            #if CYTHON_FAST_PYCCALL
+            if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
+              PyObject *__pyx_temp[2] = {__pyx_t_1, __pyx_v_data};
+              __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 15, __pyx_L7_error)
+              __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __Pyx_GOTREF(__pyx_t_4);
+            } else
+            #endif
+            {
+              __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 15, __pyx_L7_error)
+              __Pyx_GOTREF(__pyx_t_5);
+              __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1); __pyx_t_1 = NULL;
+              __Pyx_INCREF(__pyx_v_data);
+              __Pyx_GIVEREF(__pyx_v_data);
+              PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_data);
+              __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 15, __pyx_L7_error)
+              __Pyx_GOTREF(__pyx_t_4);
+              __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+            }
+          }
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+          /* "src/data_places.py":14
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):
+ *         with open(filename, 'wb') as f:             # <<<<<<<<<<<<<<
+ *             f.write(data)
+ * 
+ */
+        }
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+        goto __pyx_L12_try_end;
+        __pyx_L7_error:;
+        __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        /*except:*/ {
+          __Pyx_AddTraceback("pychronus.data_places.Strage.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
+          if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_2, &__pyx_t_5) < 0) __PYX_ERR(0, 14, __pyx_L9_except_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_GOTREF(__pyx_t_5);
+          __pyx_t_1 = PyTuple_Pack(3, __pyx_t_4, __pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L9_except_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, NULL);
+          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 14, __pyx_L9_except_error)
+          __Pyx_GOTREF(__pyx_t_9);
+          __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_9);
+          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+          if (__pyx_t_10 < 0) __PYX_ERR(0, 14, __pyx_L9_except_error)
+          __pyx_t_11 = ((!(__pyx_t_10 != 0)) != 0);
+          if (__pyx_t_11) {
+            __Pyx_GIVEREF(__pyx_t_4);
+            __Pyx_GIVEREF(__pyx_t_2);
+            __Pyx_XGIVEREF(__pyx_t_5);
+            __Pyx_ErrRestoreWithState(__pyx_t_4, __pyx_t_2, __pyx_t_5);
+            __pyx_t_4 = 0; __pyx_t_2 = 0; __pyx_t_5 = 0; 
+            __PYX_ERR(0, 14, __pyx_L9_except_error)
+          }
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+          goto __pyx_L8_exception_handled;
+        }
+        __pyx_L9_except_error:;
+        __Pyx_XGIVEREF(__pyx_t_6);
+        __Pyx_XGIVEREF(__pyx_t_7);
+        __Pyx_XGIVEREF(__pyx_t_8);
+        __Pyx_ExceptionReset(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+        goto __pyx_L1_error;
+        __pyx_L8_exception_handled:;
+        __Pyx_XGIVEREF(__pyx_t_6);
+        __Pyx_XGIVEREF(__pyx_t_7);
+        __Pyx_XGIVEREF(__pyx_t_8);
+        __Pyx_ExceptionReset(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+        __pyx_L12_try_end:;
       }
     }
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF_SET(__pyx_v__data, __pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "pychronus.py":68
- *             _data = self.memory_data[filename]
- * 
- *         elif place == 'redis':             # <<<<<<<<<<<<<<
- *             _data = self.redis.get(filename)
- * 
- */
-  }
-  __pyx_L3:;
-
-  /* "pychronus.py":71
- *             _data = self.redis.get(filename)
- * 
- *         _data = decompress(_data, self.compressed)             # <<<<<<<<<<<<<<
- *         _data = deserialize(_data)
- *         return _data
- */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_decompress); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_compressed); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_2 = NULL;
-  __pyx_t_12 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-      __pyx_t_12 = 1;
+    /*finally:*/ {
+      /*normal exit:*/{
+        if (__pyx_t_3) {
+          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple_, NULL);
+          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 14, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        }
+        goto __pyx_L6;
+      }
+      __pyx_L6:;
     }
+    goto __pyx_L16;
+    __pyx_L3_error:;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    goto __pyx_L1_error;
+    __pyx_L16:;
   }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_5)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v__data, __pyx_t_6};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v__data, __pyx_t_6};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 71, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_13);
-    if (__pyx_t_2) {
-      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_2); __pyx_t_2 = NULL;
-    }
-    __Pyx_INCREF(__pyx_v__data);
-    __Pyx_GIVEREF(__pyx_v__data);
-    PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_v__data);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_t_6);
-    __pyx_t_6 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF_SET(__pyx_v__data, __pyx_t_1);
-  __pyx_t_1 = 0;
 
-  /* "pychronus.py":72
+  /* "src/data_places.py":13
  * 
- *         _data = decompress(_data, self.compressed)
- *         _data = deserialize(_data)             # <<<<<<<<<<<<<<
- *         return _data
- * 
- */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_deserialize); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_13 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_13)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_13);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  if (!__pyx_t_13) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v__data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-  } else {
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_5)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_13, __pyx_v__data};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-      __Pyx_GOTREF(__pyx_t_1);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-      PyObject *__pyx_temp[2] = {__pyx_t_13, __pyx_v__data};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-      __Pyx_GOTREF(__pyx_t_1);
-    } else
-    #endif
-    {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 72, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_13); __pyx_t_13 = NULL;
-      __Pyx_INCREF(__pyx_v__data);
-      __Pyx_GIVEREF(__pyx_v__data);
-      PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_v__data);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    }
-  }
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF_SET(__pyx_v__data, __pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "pychronus.py":73
- *         _data = decompress(_data, self.compressed)
- *         _data = deserialize(_data)
- *         return _data             # <<<<<<<<<<<<<<
- * 
- *     def delete(self, dataname):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v__data);
-  __pyx_r = __pyx_v__data;
-  goto __pyx_L0;
-
-  /* "pychronus.py":56
- *             self.redis.set(filename, _data)
- * 
- *     def load(self, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         with open(filename, 'wb') as f:
+ *             f.write(data)
  */
 
   /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_13);
-  __Pyx_AddTraceback("pychronus.Pychronus.load", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pychronus.data_places.Strage.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_filename);
-  __Pyx_XDECREF(__pyx_v_place);
-  __Pyx_XDECREF(__pyx_v__data);
   __Pyx_XDECREF(__pyx_v_f);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pychronus.py":75
- *         return _data
+/* "src/data_places.py":17
+ *             f.write(data)
  * 
- *     def delete(self, dataname):             # <<<<<<<<<<<<<<
- *         pass
- * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         data = None
+ *         with open(filename, 'rb') as f:
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_9Pychronus_7delete(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_9Pychronus_7delete = {"delete", (PyCFunction)__pyx_pw_9pychronus_9Pychronus_7delete, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_9Pychronus_7delete(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9pychronus_11data_places_6Strage_3read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_6Strage_3read = {"read", (PyCFunction)__pyx_pw_9pychronus_11data_places_6Strage_3read, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_6Strage_3read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_self = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_dataname = 0;
+  PyObject *__pyx_v_filename = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("delete (wrapper)", 0);
+  __Pyx_RefNannySetupContext("read (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_dataname,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_filename,0};
     PyObject* values[2] = {0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -3381,13 +1751,13 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_7delete(PyObject *__pyx_self, Py
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_dataname)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("delete", 1, 2, 2, 1); __PYX_ERR(0, 75, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, 1); __PYX_ERR(0, 17, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "delete") < 0)) __PYX_ERR(0, 75, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read") < 0)) __PYX_ERR(0, 17, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3396,55 +1766,335 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_7delete(PyObject *__pyx_self, Py
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_self = values[0];
-    __pyx_v_dataname = values[1];
+    __pyx_v_filename = values[1];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("delete", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 75, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 17, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.Pychronus.delete", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pychronus.data_places.Strage.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_9Pychronus_6delete(__pyx_self, __pyx_v_self, __pyx_v_dataname);
+  __pyx_r = __pyx_pf_9pychronus_11data_places_6Strage_2read(__pyx_self, __pyx_v_self, __pyx_v_filename);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9pychronus_9Pychronus_6delete(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_dataname) {
+static PyObject *__pyx_pf_9pychronus_11data_places_6Strage_2read(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self, PyObject *__pyx_v_filename) {
+  PyObject *__pyx_v_data = NULL;
+  PyObject *__pyx_v_f = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("delete", 0);
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  int __pyx_t_10;
+  int __pyx_t_11;
+  __Pyx_RefNannySetupContext("read", 0);
+
+  /* "src/data_places.py":18
+ * 
+ *     def read(self, filename):
+ *         data = None             # <<<<<<<<<<<<<<
+ *         with open(filename, 'rb') as f:
+ *             data = f.read()
+ */
+  __Pyx_INCREF(Py_None);
+  __pyx_v_data = Py_None;
+
+  /* "src/data_places.py":19
+ *     def read(self, filename):
+ *         data = None
+ *         with open(filename, 'rb') as f:             # <<<<<<<<<<<<<<
+ *             data = f.read()
+ *         return data
+ */
+  /*with:*/ {
+    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_INCREF(__pyx_v_filename);
+    __Pyx_GIVEREF(__pyx_v_filename);
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_filename);
+    __Pyx_INCREF(__pyx_n_s_rb);
+    __Pyx_GIVEREF(__pyx_n_s_rb);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_rb);
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_open, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_3 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_exit); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 19, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_2, __pyx_n_s_enter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 19, __pyx_L3_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_5)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
+      }
+    }
+    if (__pyx_t_5) {
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L3_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    } else {
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L3_error)
+    }
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __pyx_t_1;
+    __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    /*try:*/ {
+      {
+        __Pyx_PyThreadState_declare
+        __Pyx_PyThreadState_assign
+        __Pyx_ExceptionSave(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+        __Pyx_XGOTREF(__pyx_t_6);
+        __Pyx_XGOTREF(__pyx_t_7);
+        __Pyx_XGOTREF(__pyx_t_8);
+        /*try:*/ {
+          __pyx_v_f = __pyx_t_4;
+          __pyx_t_4 = 0;
+
+          /* "src/data_places.py":20
+ *         data = None
+ *         with open(filename, 'rb') as f:
+ *             data = f.read()             # <<<<<<<<<<<<<<
+ *         return data
+ * 
+ */
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_f, __pyx_n_s_read); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __pyx_t_1 = NULL;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+            __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
+            if (likely(__pyx_t_1)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+              __Pyx_INCREF(__pyx_t_1);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_2, function);
+            }
+          }
+          if (__pyx_t_1) {
+            __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 20, __pyx_L7_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          } else {
+            __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 20, __pyx_L7_error)
+          }
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __Pyx_DECREF_SET(__pyx_v_data, __pyx_t_4);
+          __pyx_t_4 = 0;
+
+          /* "src/data_places.py":19
+ *     def read(self, filename):
+ *         data = None
+ *         with open(filename, 'rb') as f:             # <<<<<<<<<<<<<<
+ *             data = f.read()
+ *         return data
+ */
+        }
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+        goto __pyx_L12_try_end;
+        __pyx_L7_error:;
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        /*except:*/ {
+          __Pyx_AddTraceback("pychronus.data_places.Strage.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
+          if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_2, &__pyx_t_1) < 0) __PYX_ERR(0, 19, __pyx_L9_except_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_5 = PyTuple_Pack(3, __pyx_t_4, __pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 19, __pyx_L9_except_error)
+          __Pyx_GOTREF(__pyx_t_5);
+          __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL);
+          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 19, __pyx_L9_except_error)
+          __Pyx_GOTREF(__pyx_t_9);
+          __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_9);
+          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+          if (__pyx_t_10 < 0) __PYX_ERR(0, 19, __pyx_L9_except_error)
+          __pyx_t_11 = ((!(__pyx_t_10 != 0)) != 0);
+          if (__pyx_t_11) {
+            __Pyx_GIVEREF(__pyx_t_4);
+            __Pyx_GIVEREF(__pyx_t_2);
+            __Pyx_XGIVEREF(__pyx_t_1);
+            __Pyx_ErrRestoreWithState(__pyx_t_4, __pyx_t_2, __pyx_t_1);
+            __pyx_t_4 = 0; __pyx_t_2 = 0; __pyx_t_1 = 0; 
+            __PYX_ERR(0, 19, __pyx_L9_except_error)
+          }
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          goto __pyx_L8_exception_handled;
+        }
+        __pyx_L9_except_error:;
+        __Pyx_XGIVEREF(__pyx_t_6);
+        __Pyx_XGIVEREF(__pyx_t_7);
+        __Pyx_XGIVEREF(__pyx_t_8);
+        __Pyx_ExceptionReset(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+        goto __pyx_L1_error;
+        __pyx_L8_exception_handled:;
+        __Pyx_XGIVEREF(__pyx_t_6);
+        __Pyx_XGIVEREF(__pyx_t_7);
+        __Pyx_XGIVEREF(__pyx_t_8);
+        __Pyx_ExceptionReset(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+        __pyx_L12_try_end:;
+      }
+    }
+    /*finally:*/ {
+      /*normal exit:*/{
+        if (__pyx_t_3) {
+          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__2, NULL);
+          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 19, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        }
+        goto __pyx_L6;
+      }
+      __pyx_L6:;
+    }
+    goto __pyx_L16;
+    __pyx_L3_error:;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    goto __pyx_L1_error;
+    __pyx_L16:;
+  }
+
+  /* "src/data_places.py":21
+ *         with open(filename, 'rb') as f:
+ *             data = f.read()
+ *         return data             # <<<<<<<<<<<<<<
+ * 
+ * class Memory(DataPlace):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_data);
+  __pyx_r = __pyx_v_data;
+  goto __pyx_L0;
+
+  /* "src/data_places.py":17
+ *             f.write(data)
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         data = None
+ *         with open(filename, 'rb') as f:
+ */
 
   /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_AddTraceback("pychronus.data_places.Strage.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_data);
+  __Pyx_XDECREF(__pyx_v_f);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pychronus.py":78
- *         pass
+/* "src/data_places.py":24
  * 
- *     def update(self, data, dataname):             # <<<<<<<<<<<<<<
- *         self.save(data, dataname)
+ * class Memory(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
+ *         self.mem = {}
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9pychronus_9Pychronus_9update(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9pychronus_9Pychronus_9update = {"update", (PyCFunction)__pyx_pw_9pychronus_9Pychronus_9update, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9pychronus_9Pychronus_9update(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_self = 0;
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_v_dataname = 0;
+static PyObject *__pyx_pw_9pychronus_11data_places_6Memory_1__init__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_6Memory_1__init__ = {"__init__", (PyCFunction)__pyx_pw_9pychronus_11data_places_6Memory_1__init__, METH_O, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_6Memory_1__init__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("update (wrapper)", 0);
+  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_9pychronus_11data_places_6Memory___init__(__pyx_self, ((PyObject *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9pychronus_11data_places_6Memory___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__init__", 0);
+
+  /* "src/data_places.py":25
+ * class Memory(DataPlace):
+ *     def __init__(self):
+ *         self.mem = {}             # <<<<<<<<<<<<<<
+ * 
+ *     def write(self, data, filename):
+ */
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_mem, __pyx_t_1) < 0) __PYX_ERR(0, 25, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "src/data_places.py":24
+ * 
+ * class Memory(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
+ *         self.mem = {}
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pychronus.data_places.Memory.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/data_places.py":27
+ *         self.mem = {}
+ * 
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.mem[filename] = data
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9pychronus_11data_places_6Memory_3write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_6Memory_3write = {"write", (PyCFunction)__pyx_pw_9pychronus_11data_places_6Memory_3write, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_6Memory_3write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_self = 0;
+  PyObject *__pyx_v_data = 0;
+  PyObject *__pyx_v_filename = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("write (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_data,&__pyx_n_s_dataname,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_data,&__pyx_n_s_filename,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -3468,17 +2118,17 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_9update(PyObject *__pyx_self, Py
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 3, 3, 1); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 1); __PYX_ERR(0, 27, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_dataname)) != 0)) kw_args--;
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 3, 3, 2); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 2); __PYX_ERR(0, 27, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update") < 0)) __PYX_ERR(0, 78, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "write") < 0)) __PYX_ERR(0, 27, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -3489,24 +2139,335 @@ static PyObject *__pyx_pw_9pychronus_9Pychronus_9update(PyObject *__pyx_self, Py
     }
     __pyx_v_self = values[0];
     __pyx_v_data = values[1];
-    __pyx_v_dataname = values[2];
+    __pyx_v_filename = values[2];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("update", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 78, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 27, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pychronus.Pychronus.update", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pychronus.data_places.Memory.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9pychronus_9Pychronus_8update(__pyx_self, __pyx_v_self, __pyx_v_data, __pyx_v_dataname);
+  __pyx_r = __pyx_pf_9pychronus_11data_places_6Memory_2write(__pyx_self, __pyx_v_self, __pyx_v_data, __pyx_v_filename);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9pychronus_9Pychronus_8update(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_dataname) {
+static PyObject *__pyx_pf_9pychronus_11data_places_6Memory_2write(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_filename) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("write", 0);
+
+  /* "src/data_places.py":28
+ * 
+ *     def write(self, data, filename):
+ *         self.mem[filename] = data             # <<<<<<<<<<<<<<
+ * 
+ *     def read(self, filename):
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_mem); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_v_filename, __pyx_v_data) < 0)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "src/data_places.py":27
+ *         self.mem = {}
+ * 
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.mem[filename] = data
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pychronus.data_places.Memory.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/data_places.py":30
+ *         self.mem[filename] = data
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.mem[filename]
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9pychronus_11data_places_6Memory_5read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_6Memory_5read = {"read", (PyCFunction)__pyx_pw_9pychronus_11data_places_6Memory_5read, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_6Memory_5read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_self = 0;
+  PyObject *__pyx_v_filename = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("read (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_filename,0};
+    PyObject* values[2] = {0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_self)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, 1); __PYX_ERR(0, 30, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read") < 0)) __PYX_ERR(0, 30, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+    }
+    __pyx_v_self = values[0];
+    __pyx_v_filename = values[1];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 30, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pychronus.data_places.Memory.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_9pychronus_11data_places_6Memory_4read(__pyx_self, __pyx_v_self, __pyx_v_filename);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9pychronus_11data_places_6Memory_4read(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_filename) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  __Pyx_RefNannySetupContext("read", 0);
+
+  /* "src/data_places.py":31
+ * 
+ *     def read(self, filename):
+ *         return self.mem[filename]             # <<<<<<<<<<<<<<
+ * 
+ * class Redis(DataPlace):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_mem); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyObject_GetItem(__pyx_t_1, __pyx_v_filename); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
+  goto __pyx_L0;
+
+  /* "src/data_places.py":30
+ *         self.mem[filename] = data
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.mem[filename]
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("pychronus.data_places.Memory.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/data_places.py":34
+ * 
+ * class Redis(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9pychronus_11data_places_5Redis_1__init__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_5Redis_1__init__ = {"__init__", (PyCFunction)__pyx_pw_9pychronus_11data_places_5Redis_1__init__, METH_O, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_5Redis_1__init__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_9pychronus_11data_places_5Redis___init__(__pyx_self, ((PyObject *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9pychronus_11data_places_5Redis___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  __Pyx_RefNannySetupContext("__init__", 0);
+
+  /* "src/data_places.py":35
+ * class Redis(DataPlace):
+ *     def __init__(self):
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)             # <<<<<<<<<<<<<<
+ * 
+ *     def write(self, data, filename):
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_redis); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_Redis); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_host, __pyx_n_s_localhost) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_port, __pyx_int_6379) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_db, __pyx_int_0) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_redis, __pyx_t_3) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "src/data_places.py":34
+ * 
+ * class Redis(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_AddTraceback("pychronus.data_places.Redis.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/data_places.py":37
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
+ * 
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.redis.set(filename, data)
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9pychronus_11data_places_5Redis_3write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_5Redis_3write = {"write", (PyCFunction)__pyx_pw_9pychronus_11data_places_5Redis_3write, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_5Redis_3write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_self = 0;
+  PyObject *__pyx_v_data = 0;
+  PyObject *__pyx_v_filename = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("write (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_data,&__pyx_n_s_filename,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_self)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 1); __PYX_ERR(0, 37, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, 2); __PYX_ERR(0, 37, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "write") < 0)) __PYX_ERR(0, 37, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_self = values[0];
+    __pyx_v_data = values[1];
+    __pyx_v_filename = values[2];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("write", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 37, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pychronus.data_places.Redis.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_9pychronus_11data_places_5Redis_2write(__pyx_self, __pyx_v_self, __pyx_v_data, __pyx_v_filename);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9pychronus_11data_places_5Redis_2write(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_data, PyObject *__pyx_v_filename) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3514,69 +2475,72 @@ static PyObject *__pyx_pf_9pychronus_9Pychronus_8update(CYTHON_UNUSED PyObject *
   PyObject *__pyx_t_3 = NULL;
   int __pyx_t_4;
   PyObject *__pyx_t_5 = NULL;
-  __Pyx_RefNannySetupContext("update", 0);
+  __Pyx_RefNannySetupContext("write", 0);
 
-  /* "pychronus.py":79
+  /* "src/data_places.py":38
  * 
- *     def update(self, data, dataname):
- *         self.save(data, dataname)             # <<<<<<<<<<<<<<
+ *     def write(self, data, filename):
+ *         self.redis.set(filename, data)             # <<<<<<<<<<<<<<
  * 
- * if __name__ == '__main__':
+ *     def read(self, filename):
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_save); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_redis); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_set); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
   __pyx_t_4 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
       __pyx_t_4 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_data, __pyx_v_dataname};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (PyFunction_Check(__pyx_t_3)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_filename, __pyx_v_data};
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_data, __pyx_v_dataname};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_filename, __pyx_v_data};
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (__pyx_t_3) {
-      __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
+    if (__pyx_t_2) {
+      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
     }
+    __Pyx_INCREF(__pyx_v_filename);
+    __Pyx_GIVEREF(__pyx_v_filename);
+    PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_4, __pyx_v_filename);
     __Pyx_INCREF(__pyx_v_data);
     __Pyx_GIVEREF(__pyx_v_data);
-    PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_4, __pyx_v_data);
-    __Pyx_INCREF(__pyx_v_dataname);
-    __Pyx_GIVEREF(__pyx_v_dataname);
-    PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_v_dataname);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
+    PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_v_data);
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pychronus.py":78
- *         pass
+  /* "src/data_places.py":37
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
  * 
- *     def update(self, data, dataname):             # <<<<<<<<<<<<<<
- *         self.save(data, dataname)
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.redis.set(filename, data)
  * 
  */
 
@@ -3588,7 +2552,164 @@ static PyObject *__pyx_pf_9pychronus_9Pychronus_8update(CYTHON_UNUSED PyObject *
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("pychronus.Pychronus.update", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pychronus.data_places.Redis.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "src/data_places.py":40
+ *         self.redis.set(filename, data)
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.redis.get(filename)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9pychronus_11data_places_5Redis_5read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9pychronus_11data_places_5Redis_5read = {"read", (PyCFunction)__pyx_pw_9pychronus_11data_places_5Redis_5read, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9pychronus_11data_places_5Redis_5read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_self = 0;
+  PyObject *__pyx_v_filename = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("read (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_filename,0};
+    PyObject* values[2] = {0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_self)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, 1); __PYX_ERR(0, 40, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read") < 0)) __PYX_ERR(0, 40, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+    }
+    __pyx_v_self = values[0];
+    __pyx_v_filename = values[1];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("read", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 40, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pychronus.data_places.Redis.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_9pychronus_11data_places_5Redis_4read(__pyx_self, __pyx_v_self, __pyx_v_filename);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9pychronus_11data_places_5Redis_4read(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_filename) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("read", 0);
+
+  /* "src/data_places.py":41
+ * 
+ *     def read(self, filename):
+ *         return self.redis.get(filename)             # <<<<<<<<<<<<<<
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_redis); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_get); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  if (!__pyx_t_2) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+  } else {
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(__pyx_t_3)) {
+      PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_filename};
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_GOTREF(__pyx_t_1);
+    } else
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+      PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_filename};
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_GOTREF(__pyx_t_1);
+    } else
+    #endif
+    {
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 41, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2); __pyx_t_2 = NULL;
+      __Pyx_INCREF(__pyx_v_filename);
+      __Pyx_GIVEREF(__pyx_v_filename);
+      PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_filename);
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    }
+  }
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "src/data_places.py":40
+ *         self.redis.set(filename, data)
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.redis.get(filename)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("pychronus.data_places.Redis.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3603,17 +2724,17 @@ static PyMethodDef __pyx_methods[] = {
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_pychronus(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_data_places(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_pychronus},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_data_places},
   {0, NULL}
 };
 #endif
 
 static struct PyModuleDef __pyx_moduledef = {
     PyModuleDef_HEAD_INIT,
-    "pychronus",
+    "data_places",
     0, /* m_doc */
   #if CYTHON_PEP489_MULTI_PHASE_INIT
     0, /* m_size */
@@ -3633,83 +2754,57 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_kp_s_, __pyx_k_, sizeof(__pyx_k_), 0, 0, 1, 0},
-  {&__pyx_n_s_Pychronus, __pyx_k_Pychronus, sizeof(__pyx_k_Pychronus), 0, 0, 1, 1},
-  {&__pyx_n_s_Pychronus___init, __pyx_k_Pychronus___init, sizeof(__pyx_k_Pychronus___init), 0, 0, 1, 1},
-  {&__pyx_n_s_Pychronus_delete, __pyx_k_Pychronus_delete, sizeof(__pyx_k_Pychronus_delete), 0, 0, 1, 1},
-  {&__pyx_n_s_Pychronus_load, __pyx_k_Pychronus_load, sizeof(__pyx_k_Pychronus_load), 0, 0, 1, 1},
-  {&__pyx_n_s_Pychronus_save, __pyx_k_Pychronus_save, sizeof(__pyx_k_Pychronus_save), 0, 0, 1, 1},
-  {&__pyx_n_s_Pychronus_update, __pyx_k_Pychronus_update, sizeof(__pyx_k_Pychronus_update), 0, 0, 1, 1},
+  {&__pyx_n_s_DataPlace, __pyx_k_DataPlace, sizeof(__pyx_k_DataPlace), 0, 0, 1, 1},
+  {&__pyx_n_s_DataPlace_read, __pyx_k_DataPlace_read, sizeof(__pyx_k_DataPlace_read), 0, 0, 1, 1},
+  {&__pyx_n_s_DataPlace_write, __pyx_k_DataPlace_write, sizeof(__pyx_k_DataPlace_write), 0, 0, 1, 1},
+  {&__pyx_n_s_Memory, __pyx_k_Memory, sizeof(__pyx_k_Memory), 0, 0, 1, 1},
+  {&__pyx_n_s_Memory___init, __pyx_k_Memory___init, sizeof(__pyx_k_Memory___init), 0, 0, 1, 1},
+  {&__pyx_n_s_Memory_read, __pyx_k_Memory_read, sizeof(__pyx_k_Memory_read), 0, 0, 1, 1},
+  {&__pyx_n_s_Memory_write, __pyx_k_Memory_write, sizeof(__pyx_k_Memory_write), 0, 0, 1, 1},
   {&__pyx_n_s_Redis, __pyx_k_Redis, sizeof(__pyx_k_Redis), 0, 0, 1, 1},
-  {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
-  {&__pyx_n_s_bz2, __pyx_k_bz2, sizeof(__pyx_k_bz2), 0, 0, 1, 1},
+  {&__pyx_n_s_Redis___init, __pyx_k_Redis___init, sizeof(__pyx_k_Redis___init), 0, 0, 1, 1},
+  {&__pyx_n_s_Redis_read, __pyx_k_Redis_read, sizeof(__pyx_k_Redis_read), 0, 0, 1, 1},
+  {&__pyx_n_s_Redis_write, __pyx_k_Redis_write, sizeof(__pyx_k_Redis_write), 0, 0, 1, 1},
+  {&__pyx_n_s_Strage, __pyx_k_Strage, sizeof(__pyx_k_Strage), 0, 0, 1, 1},
+  {&__pyx_n_s_Strage_read, __pyx_k_Strage_read, sizeof(__pyx_k_Strage_read), 0, 0, 1, 1},
+  {&__pyx_n_s_Strage_write, __pyx_k_Strage_write, sizeof(__pyx_k_Strage_write), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-  {&__pyx_n_s_compress, __pyx_k_compress, sizeof(__pyx_k_compress), 0, 0, 1, 1},
-  {&__pyx_n_s_compress_level, __pyx_k_compress_level, sizeof(__pyx_k_compress_level), 0, 0, 1, 1},
-  {&__pyx_n_s_compress_options, __pyx_k_compress_options, sizeof(__pyx_k_compress_options), 0, 0, 1, 1},
-  {&__pyx_n_s_compressed, __pyx_k_compressed, sizeof(__pyx_k_compressed), 0, 0, 1, 1},
   {&__pyx_n_s_data, __pyx_k_data, sizeof(__pyx_k_data), 0, 0, 1, 1},
-  {&__pyx_n_s_data_2, __pyx_k_data_2, sizeof(__pyx_k_data_2), 0, 0, 1, 1},
-  {&__pyx_n_s_dataname, __pyx_k_dataname, sizeof(__pyx_k_dataname), 0, 0, 1, 1},
   {&__pyx_n_s_db, __pyx_k_db, sizeof(__pyx_k_db), 0, 0, 1, 1},
-  {&__pyx_n_s_decompress, __pyx_k_decompress, sizeof(__pyx_k_decompress), 0, 0, 1, 1},
-  {&__pyx_n_s_delete, __pyx_k_delete, sizeof(__pyx_k_delete), 0, 0, 1, 1},
-  {&__pyx_n_s_deserialize, __pyx_k_deserialize, sizeof(__pyx_k_deserialize), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
-  {&__pyx_n_s_dumps, __pyx_k_dumps, sizeof(__pyx_k_dumps), 0, 0, 1, 1},
-  {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
   {&__pyx_n_s_enter, __pyx_k_enter, sizeof(__pyx_k_enter), 0, 0, 1, 1},
   {&__pyx_n_s_exit, __pyx_k_exit, sizeof(__pyx_k_exit), 0, 0, 1, 1},
   {&__pyx_n_s_f, __pyx_k_f, sizeof(__pyx_k_f), 0, 0, 1, 1},
-  {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_filename, __pyx_k_filename, sizeof(__pyx_k_filename), 0, 0, 1, 1},
   {&__pyx_n_s_get, __pyx_k_get, sizeof(__pyx_k_get), 0, 0, 1, 1},
-  {&__pyx_n_s_gzip, __pyx_k_gzip, sizeof(__pyx_k_gzip), 0, 0, 1, 1},
-  {&__pyx_n_s_hoge, __pyx_k_hoge, sizeof(__pyx_k_hoge), 0, 0, 1, 1},
   {&__pyx_n_s_host, __pyx_k_host, sizeof(__pyx_k_host), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_init, __pyx_k_init, sizeof(__pyx_k_init), 0, 0, 1, 1},
-  {&__pyx_n_s_load, __pyx_k_load, sizeof(__pyx_k_load), 0, 0, 1, 1},
-  {&__pyx_n_s_loads, __pyx_k_loads, sizeof(__pyx_k_loads), 0, 0, 1, 1},
   {&__pyx_n_s_localhost, __pyx_k_localhost, sizeof(__pyx_k_localhost), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_mem, __pyx_k_mem, sizeof(__pyx_k_mem), 0, 0, 1, 1},
-  {&__pyx_n_s_memory_data, __pyx_k_memory_data, sizeof(__pyx_k_memory_data), 0, 0, 1, 1},
   {&__pyx_n_s_metaclass, __pyx_k_metaclass, sizeof(__pyx_k_metaclass), 0, 0, 1, 1},
   {&__pyx_n_s_module, __pyx_k_module, sizeof(__pyx_k_module), 0, 0, 1, 1},
-  {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_open, __pyx_k_open, sizeof(__pyx_k_open), 0, 0, 1, 1},
-  {&__pyx_n_s_p, __pyx_k_p, sizeof(__pyx_k_p), 0, 0, 1, 1},
-  {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
-  {&__pyx_n_s_place, __pyx_k_place, sizeof(__pyx_k_place), 0, 0, 1, 1},
   {&__pyx_n_s_place_options, __pyx_k_place_options, sizeof(__pyx_k_place_options), 0, 0, 1, 1},
-  {&__pyx_kp_s_place_shuold_be_strage_mem_or_r, __pyx_k_place_shuold_be_strage_mem_or_r, sizeof(__pyx_k_place_shuold_be_strage_mem_or_r), 0, 0, 1, 0},
   {&__pyx_n_s_port, __pyx_k_port, sizeof(__pyx_k_port), 0, 0, 1, 1},
   {&__pyx_n_s_prepare, __pyx_k_prepare, sizeof(__pyx_k_prepare), 0, 0, 1, 1},
-  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
-  {&__pyx_n_s_pychronus, __pyx_k_pychronus, sizeof(__pyx_k_pychronus), 0, 0, 1, 1},
+  {&__pyx_n_s_pychronus_data_places, __pyx_k_pychronus_data_places, sizeof(__pyx_k_pychronus_data_places), 0, 0, 1, 1},
   {&__pyx_n_s_qualname, __pyx_k_qualname, sizeof(__pyx_k_qualname), 0, 0, 1, 1},
   {&__pyx_n_s_rb, __pyx_k_rb, sizeof(__pyx_k_rb), 0, 0, 1, 1},
   {&__pyx_n_s_read, __pyx_k_read, sizeof(__pyx_k_read), 0, 0, 1, 1},
   {&__pyx_n_s_redis, __pyx_k_redis, sizeof(__pyx_k_redis), 0, 0, 1, 1},
-  {&__pyx_n_s_root_path, __pyx_k_root_path, sizeof(__pyx_k_root_path), 0, 0, 1, 1},
-  {&__pyx_n_s_save, __pyx_k_save, sizeof(__pyx_k_save), 0, 0, 1, 1},
   {&__pyx_n_s_self, __pyx_k_self, sizeof(__pyx_k_self), 0, 0, 1, 1},
-  {&__pyx_n_s_serialize, __pyx_k_serialize, sizeof(__pyx_k_serialize), 0, 0, 1, 1},
   {&__pyx_n_s_set, __pyx_k_set, sizeof(__pyx_k_set), 0, 0, 1, 1},
-  {&__pyx_kp_s_src_pychronus_py, __pyx_k_src_pychronus_py, sizeof(__pyx_k_src_pychronus_py), 0, 0, 1, 0},
+  {&__pyx_kp_s_src_data_places_py, __pyx_k_src_data_places_py, sizeof(__pyx_k_src_data_places_py), 0, 0, 1, 0},
   {&__pyx_n_s_strage, __pyx_k_strage, sizeof(__pyx_k_strage), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
-  {&__pyx_n_s_test_data, __pyx_k_test_data, sizeof(__pyx_k_test_data), 0, 0, 1, 1},
-  {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
   {&__pyx_n_s_wb, __pyx_k_wb, sizeof(__pyx_k_wb), 0, 0, 1, 1},
   {&__pyx_n_s_write, __pyx_k_write, sizeof(__pyx_k_write), 0, 0, 1, 1},
-  {&__pyx_n_s_zip, __pyx_k_zip, sizeof(__pyx_k_zip), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 33, __pyx_L1_error)
-  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 14, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3719,179 +2814,146 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "pychronus.py":33
+  /* "src/data_places.py":14
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):
+ *         with open(filename, 'wb') as f:             # <<<<<<<<<<<<<<
+ *             f.write(data)
  * 
- *         if place not in place_options:
- *             raise ValueError("'place' shuold be 'strage', 'mem', or 'redis'")             # <<<<<<<<<<<<<<
- *         self.root_path = root_path
- *         self.place = place
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_place_shuold_be_strage_mem_or_r); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 14, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple_);
+  __Pyx_GIVEREF(__pyx_tuple_);
+
+  /* "src/data_places.py":19
+ *     def read(self, filename):
+ *         data = None
+ *         with open(filename, 'rb') as f:             # <<<<<<<<<<<<<<
+ *             data = f.read()
+ *         return data
+ */
+  __pyx_tuple__2 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "pychronus.py":47
- *         _data = compress(_data, self.compressed, self.compress_level)
- *         if place == 'strage':
- *             with open(filename, 'wb') as f:             # <<<<<<<<<<<<<<
- *                 f.write(_data)
+  /* "src/data_places.py":7
  * 
+ * class DataPlace():
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         pass
+ *     def read(self, filename):
  */
-  __pyx_tuple__3 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_filename); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
+  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_write, 7, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 7, __pyx_L1_error)
 
-  /* "pychronus.py":62
- * 
- *         if place == 'strage':
- *             with open(filename, 'rb') as f:             # <<<<<<<<<<<<<<
- *                 _data = f.read()
+  /* "src/data_places.py":9
+ *     def write(self, data, filename):
+ *         pass
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         pass
  * 
  */
-  __pyx_tuple__4 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__4);
-  __Pyx_GIVEREF(__pyx_tuple__4);
-
-  /* "pychronus.py":11
- * compress_options = [None, 'gzip', 'bz2', 'zip']
- * 
- * def compress(data, compressed, compress_level):             # <<<<<<<<<<<<<<
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
- */
-  __pyx_tuple__5 = PyTuple_Pack(3, __pyx_n_s_data, __pyx_n_s_compressed, __pyx_n_s_compress_level); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 11, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_filename); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_compress, 11, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 11, __pyx_L1_error)
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_read, 9, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 9, __pyx_L1_error)
 
-  /* "pychronus.py":14
- *     return bz2.compress(data, compress_level) if compressed else data
+  /* "src/data_places.py":13
  * 
- * def decompress(data, compressed):             # <<<<<<<<<<<<<<
- *     return bz2.decompress(data) if compressed else data
- * 
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         with open(filename, 'wb') as f:
+ *             f.write(data)
  */
-  __pyx_tuple__7 = PyTuple_Pack(2, __pyx_n_s_data, __pyx_n_s_compressed); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 14, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_filename, __pyx_n_s_f); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_decompress, 14, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 14, __pyx_L1_error)
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_write, 13, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 13, __pyx_L1_error)
 
-  /* "pychronus.py":17
- *     return bz2.decompress(data) if compressed else data
+  /* "src/data_places.py":17
+ *             f.write(data)
  * 
- * def serialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.dumps(data)
- * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         data = None
+ *         with open(filename, 'rb') as f:
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_n_s_data); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_filename, __pyx_n_s_data, __pyx_n_s_f); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
-  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_serialize, 17, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_read, 17, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) __PYX_ERR(0, 17, __pyx_L1_error)
 
-  /* "pychronus.py":20
- *     return pickle.dumps(data)
+  /* "src/data_places.py":24
  * 
- * def deserialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.loads(data)
+ * class Memory(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
+ *         self.mem = {}
  * 
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_n_s_data); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
-  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_deserialize, 20, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_init, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(0, 24, __pyx_L1_error)
 
-  /* "pychronus.py":30
- *     #   - 'redis': on redis
+  /* "src/data_places.py":27
+ *         self.mem = {}
  * 
- *     def __init__(self, root_path='./', place='strage', compressed=True, compress_level=9):             # <<<<<<<<<<<<<<
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.mem[filename] = data
  * 
- *         if place not in place_options:
  */
-  __pyx_tuple__13 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_root_path, __pyx_n_s_place, __pyx_n_s_compressed, __pyx_n_s_compress_level); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_filename); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_init, 30, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 30, __pyx_L1_error)
-  __pyx_tuple__15 = PyTuple_Pack(4, ((PyObject*)__pyx_kp_s_), ((PyObject*)__pyx_n_s_strage), ((PyObject *)Py_True), ((PyObject *)__pyx_int_9)); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_write, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 27, __pyx_L1_error)
+
+  /* "src/data_places.py":30
+ *         self.mem[filename] = data
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.mem[filename]
+ * 
+ */
+  __pyx_tuple__15 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_filename); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_read, 30, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 30, __pyx_L1_error)
 
-  /* "pychronus.py":41
+  /* "src/data_places.py":34
+ * 
+ * class Redis(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
  *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
  * 
- *     def save(self, data, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
  */
-  __pyx_tuple__16 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_dataname, __pyx_n_s_filename, __pyx_n_s_place, __pyx_n_s_data_2, __pyx_n_s_f); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__16);
-  __Pyx_GIVEREF(__pyx_tuple__16);
-  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_save, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_init, 34, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 34, __pyx_L1_error)
 
-  /* "pychronus.py":56
- *             self.redis.set(filename, _data)
+  /* "src/data_places.py":37
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
  * 
- *     def load(self, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
- */
-  __pyx_tuple__18 = PyTuple_Pack(6, __pyx_n_s_self, __pyx_n_s_dataname, __pyx_n_s_filename, __pyx_n_s_place, __pyx_n_s_data_2, __pyx_n_s_f); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
-  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_load, 56, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 56, __pyx_L1_error)
-
-  /* "pychronus.py":75
- *         return _data
- * 
- *     def delete(self, dataname):             # <<<<<<<<<<<<<<
- *         pass
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.redis.set(filename, data)
  * 
  */
-  __pyx_tuple__20 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_dataname); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 75, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_delete, 75, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_tuple__19 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_filename); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_write, 37, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(0, 37, __pyx_L1_error)
 
-  /* "pychronus.py":78
- *         pass
+  /* "src/data_places.py":40
+ *         self.redis.set(filename, data)
  * 
- *     def update(self, data, dataname):             # <<<<<<<<<<<<<<
- *         self.save(data, dataname)
- * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.redis.get(filename)
  */
-  __pyx_tuple__22 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_dataname); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__22);
-  __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_pychronus_py, __pyx_n_s_update, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 78, __pyx_L1_error)
-
-  /* "pychronus.py":82
- * 
- * if __name__ == '__main__':
- *     p = Pychronus('./','redis')             # <<<<<<<<<<<<<<
- *     p.save('hoge', 'test_data')
- *     print(p.load('test_data'))
- */
-  __pyx_tuple__24 = PyTuple_Pack(2, __pyx_kp_s_, __pyx_n_s_redis); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 82, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__24);
-  __Pyx_GIVEREF(__pyx_tuple__24);
-
-  /* "pychronus.py":83
- * if __name__ == '__main__':
- *     p = Pychronus('./','redis')
- *     p.save('hoge', 'test_data')             # <<<<<<<<<<<<<<
- *     print(p.load('test_data'))
- */
-  __pyx_tuple__25 = PyTuple_Pack(2, __pyx_n_s_hoge, __pyx_n_s_test_data); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 83, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__25);
-  __Pyx_GIVEREF(__pyx_tuple__25);
-
-  /* "pychronus.py":84
- *     p = Pychronus('./','redis')
- *     p.save('hoge', 'test_data')
- *     print(p.load('test_data'))             # <<<<<<<<<<<<<<
- */
-  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_n_s_test_data); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 84, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__26);
-  __Pyx_GIVEREF(__pyx_tuple__26);
+  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_filename); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_data_places_py, __pyx_n_s_read, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3902,7 +2964,6 @@ static int __Pyx_InitCachedConstants(void) {
 static int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_9 = PyInt_FromLong(9); if (unlikely(!__pyx_int_9)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_6379 = PyInt_FromLong(6379); if (unlikely(!__pyx_int_6379)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -3910,11 +2971,11 @@ static int __Pyx_InitGlobals(void) {
 }
 
 #if PY_MAJOR_VERSION < 3
-PyMODINIT_FUNC initpychronus(void); /*proto*/
-PyMODINIT_FUNC initpychronus(void)
+PyMODINIT_FUNC initdata_places(void); /*proto*/
+PyMODINIT_FUNC initdata_places(void)
 #else
-PyMODINIT_FUNC PyInit_pychronus(void); /*proto*/
-PyMODINIT_FUNC PyInit_pychronus(void)
+PyMODINIT_FUNC PyInit_data_places(void); /*proto*/
+PyMODINIT_FUNC PyInit_data_places(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -3954,13 +3015,14 @@ bad:
 }
 
 
-static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
+static int __pyx_pymod_exec_data_places(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
-  int __pyx_t_3;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannyDeclarations
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m && __pyx_m == __pyx_pyinit_module) return 0;
@@ -3974,7 +3036,7 @@ static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
           Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_pychronus(void)", 0);
+  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_data_places(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -4010,7 +3072,7 @@ static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("pychronus", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("data_places", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -4029,14 +3091,14 @@ static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_pychronus) {
+  if (__pyx_module_is_main_pychronus__data_places) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "pychronus")) {
-      if (unlikely(PyDict_SetItemString(modules, "pychronus", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "pychronus.data_places")) {
+      if (unlikely(PyDict_SetItemString(modules, "pychronus.data_places", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -4056,49 +3118,25 @@ static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "pychronus.py":2
+  /* "src/data_places.py":2
  * # coding: utf-8
  * import redis             # <<<<<<<<<<<<<<
- * import pickle
- * import bz2
+ * 
+ * place_options = ['strage', 'mem', 'redis']
  */
   __pyx_t_1 = __Pyx_Import(__pyx_n_s_redis, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_redis, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pychronus.py":3
- * # coding: utf-8
+  /* "src/data_places.py":4
  * import redis
- * import pickle             # <<<<<<<<<<<<<<
- * import bz2
- * 
- */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pickle, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_pickle, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":4
- * import redis
- * import pickle
- * import bz2             # <<<<<<<<<<<<<<
- * 
- * # To any situation, Pychronus give us many way of data handling
- */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_bz2, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bz2, __pyx_t_1) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":8
- * # To any situation, Pychronus give us many way of data handling
  * 
  * place_options = ['strage', 'mem', 'redis']             # <<<<<<<<<<<<<<
- * compress_options = [None, 'gzip', 'bz2', 'zip']
  * 
+ * class DataPlace():
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_strage);
   __Pyx_GIVEREF(__pyx_n_s_strage);
@@ -4109,238 +3147,257 @@ static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
   __Pyx_INCREF(__pyx_n_s_redis);
   __Pyx_GIVEREF(__pyx_n_s_redis);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_redis);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_place_options, __pyx_t_1) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_place_options, __pyx_t_1) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pychronus.py":9
- * 
+  /* "src/data_places.py":6
  * place_options = ['strage', 'mem', 'redis']
- * compress_options = [None, 'gzip', 'bz2', 'zip']             # <<<<<<<<<<<<<<
  * 
- * def compress(data, compressed, compress_level):
+ * class DataPlace():             # <<<<<<<<<<<<<<
+ *     def write(self, data, filename):
+ *         pass
  */
-  __pyx_t_1 = PyList_New(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 9, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  PyList_SET_ITEM(__pyx_t_1, 0, Py_None);
-  __Pyx_INCREF(__pyx_n_s_gzip);
-  __Pyx_GIVEREF(__pyx_n_s_gzip);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_gzip);
-  __Pyx_INCREF(__pyx_n_s_bz2);
-  __Pyx_GIVEREF(__pyx_n_s_bz2);
-  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_bz2);
-  __Pyx_INCREF(__pyx_n_s_zip);
-  __Pyx_GIVEREF(__pyx_n_s_zip);
-  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_n_s_zip);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compress_options, __pyx_t_1) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":11
- * compress_options = [None, 'gzip', 'bz2', 'zip']
- * 
- * def compress(data, compressed, compress_level):             # <<<<<<<<<<<<<<
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
- */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_1compress, 0, __pyx_n_s_compress, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 11, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compress, __pyx_t_1) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":14
- *     return bz2.compress(data, compress_level) if compressed else data
- * 
- * def decompress(data, compressed):             # <<<<<<<<<<<<<<
- *     return bz2.decompress(data) if compressed else data
- * 
- */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_3decompress, 0, __pyx_n_s_decompress, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_decompress, __pyx_t_1) < 0) __PYX_ERR(0, 14, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":17
- *     return bz2.decompress(data) if compressed else data
- * 
- * def serialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.dumps(data)
- * 
- */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_5serialize, 0, __pyx_n_s_serialize, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__10)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_serialize, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":20
- *     return pickle.dumps(data)
- * 
- * def deserialize(data):             # <<<<<<<<<<<<<<
- *     return pickle.loads(data)
- * 
- */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_7deserialize, 0, __pyx_n_s_deserialize, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__12)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_deserialize, __pyx_t_1) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pychronus.py":23
- *     return pickle.loads(data)
- * 
- * class Pychronus():             # <<<<<<<<<<<<<<
- *     # Constructor
- *     # place:
- */
-  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_Pychronus, __pyx_n_s_Pychronus, (PyObject *) NULL, __pyx_n_s_pychronus, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_DataPlace, __pyx_n_s_DataPlace, (PyObject *) NULL, __pyx_n_s_pychronus_data_places, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "pychronus.py":30
- *     #   - 'redis': on redis
+  /* "src/data_places.py":7
  * 
- *     def __init__(self, root_path='./', place='strage', compressed=True, compress_level=9):             # <<<<<<<<<<<<<<
- * 
- *         if place not in place_options:
+ * class DataPlace():
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         pass
+ *     def read(self, filename):
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_9Pychronus_1__init__, 0, __pyx_n_s_Pychronus___init, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__14)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_9DataPlace_1write, 0, __pyx_n_s_DataPlace_write, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__4)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_2, __pyx_tuple__15);
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_init, __pyx_t_2) < 0) __PYX_ERR(0, 30, __pyx_L1_error)
+  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_write, __pyx_t_2) < 0) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pychronus.py":41
+  /* "src/data_places.py":9
+ *     def write(self, data, filename):
+ *         pass
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         pass
+ * 
+ */
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_9DataPlace_3read, 0, __pyx_n_s_DataPlace_read, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_read, __pyx_t_2) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "src/data_places.py":6
+ * place_options = ['strage', 'mem', 'redis']
+ * 
+ * class DataPlace():             # <<<<<<<<<<<<<<
+ *     def write(self, data, filename):
+ *         pass
+ */
+  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_DataPlace, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 6, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DataPlace, __pyx_t_2) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "src/data_places.py":12
+ *         pass
+ * 
+ * class Strage(DataPlace):             # <<<<<<<<<<<<<<
+ *     def write(self, data, filename):
+ *         with open(filename, 'wb') as f:
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_DataPlace); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_t_2, __pyx_n_s_Strage, __pyx_n_s_Strage, (PyObject *) NULL, __pyx_n_s_pychronus_data_places, (PyObject *) NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+
+  /* "src/data_places.py":13
+ * 
+ * class Strage(DataPlace):
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         with open(filename, 'wb') as f:
+ *             f.write(data)
+ */
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_6Strage_1write, 0, __pyx_n_s_Strage_write, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_write, __pyx_t_4) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/data_places.py":17
+ *             f.write(data)
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         data = None
+ *         with open(filename, 'rb') as f:
+ */
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_6Strage_3read, 0, __pyx_n_s_Strage_read, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__10)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_read, __pyx_t_4) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/data_places.py":12
+ *         pass
+ * 
+ * class Strage(DataPlace):             # <<<<<<<<<<<<<<
+ *     def write(self, data, filename):
+ *         with open(filename, 'wb') as f:
+ */
+  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_Strage, __pyx_t_2, __pyx_t_3, NULL, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Strage, __pyx_t_4) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "src/data_places.py":23
+ *         return data
+ * 
+ * class Memory(DataPlace):             # <<<<<<<<<<<<<<
+ *     def __init__(self):
+ *         self.mem = {}
+ */
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_DataPlace); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2);
+  __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_t_1, __pyx_n_s_Memory, __pyx_n_s_Memory, (PyObject *) NULL, __pyx_n_s_pychronus_data_places, (PyObject *) NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+
+  /* "src/data_places.py":24
+ * 
+ * class Memory(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
+ *         self.mem = {}
+ * 
+ */
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_6Memory_1__init__, 0, __pyx_n_s_Memory___init, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__12)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 24, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/data_places.py":27
+ *         self.mem = {}
+ * 
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.mem[filename] = data
+ * 
+ */
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_6Memory_3write, 0, __pyx_n_s_Memory_write, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__14)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_write, __pyx_t_4) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/data_places.py":30
+ *         self.mem[filename] = data
+ * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.mem[filename]
+ * 
+ */
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_6Memory_5read, 0, __pyx_n_s_Memory_read, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__16)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_read, __pyx_t_4) < 0) __PYX_ERR(0, 30, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "src/data_places.py":23
+ *         return data
+ * 
+ * class Memory(DataPlace):             # <<<<<<<<<<<<<<
+ *     def __init__(self):
+ *         self.mem = {}
+ */
+  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_Memory, __pyx_t_1, __pyx_t_3, NULL, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Memory, __pyx_t_4) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "src/data_places.py":33
+ *         return self.mem[filename]
+ * 
+ * class Redis(DataPlace):             # <<<<<<<<<<<<<<
+ *     def __init__(self):
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_DataPlace); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_t_2, __pyx_n_s_Redis, __pyx_n_s_Redis, (PyObject *) NULL, __pyx_n_s_pychronus_data_places, (PyObject *) NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+
+  /* "src/data_places.py":34
+ * 
+ * class Redis(DataPlace):
+ *     def __init__(self):             # <<<<<<<<<<<<<<
  *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
  * 
- *     def save(self, data, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_9Pychronus_3save, 0, __pyx_n_s_Pychronus_save, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__17)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_save, __pyx_t_2) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_5Redis_1__init__, 0, __pyx_n_s_Redis___init, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__18)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "pychronus.py":56
- *             self.redis.set(filename, _data)
+  /* "src/data_places.py":37
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
  * 
- *     def load(self, dataname):             # <<<<<<<<<<<<<<
- *         filename = self.root_path + dataname
- *         place = self.place
+ *     def write(self, data, filename):             # <<<<<<<<<<<<<<
+ *         self.redis.set(filename, data)
+ * 
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_9Pychronus_5load, 0, __pyx_n_s_Pychronus_load, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__19)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_load, __pyx_t_2) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_5Redis_3write, 0, __pyx_n_s_Redis_write, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__20)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_write, __pyx_t_4) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "pychronus.py":75
- *         return _data
+  /* "src/data_places.py":40
+ *         self.redis.set(filename, data)
  * 
- *     def delete(self, dataname):             # <<<<<<<<<<<<<<
- *         pass
- * 
+ *     def read(self, filename):             # <<<<<<<<<<<<<<
+ *         return self.redis.get(filename)
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_9Pychronus_7delete, 0, __pyx_n_s_Pychronus_delete, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_delete, __pyx_t_2) < 0) __PYX_ERR(0, 75, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_11data_places_5Redis_5read, 0, __pyx_n_s_Redis_read, NULL, __pyx_n_s_pychronus_data_places, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_read, __pyx_t_4) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "pychronus.py":78
- *         pass
+  /* "src/data_places.py":33
+ *         return self.mem[filename]
  * 
- *     def update(self, data, dataname):             # <<<<<<<<<<<<<<
- *         self.save(data, dataname)
- * 
+ * class Redis(DataPlace):             # <<<<<<<<<<<<<<
+ *     def __init__(self):
+ *         self.redis = redis.Redis(host='localhost', port=6379, db=0)
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9pychronus_9Pychronus_9update, 0, __pyx_n_s_Pychronus_update, NULL, __pyx_n_s_pychronus, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_update, __pyx_t_2) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-  /* "pychronus.py":23
- *     return pickle.loads(data)
- * 
- * class Pychronus():             # <<<<<<<<<<<<<<
- *     # Constructor
- *     # place:
- */
-  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_Pychronus, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Pychronus, __pyx_t_2) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_Redis, __pyx_t_2, __pyx_t_3, NULL, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Redis, __pyx_t_4) < 0) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pychronus.py":81
- *         self.save(data, dataname)
- * 
- * if __name__ == '__main__':             # <<<<<<<<<<<<<<
- *     p = Pychronus('./','redis')
- *     p.save('hoge', 'test_data')
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 81, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (__pyx_t_3) {
-
-    /* "pychronus.py":82
- * 
- * if __name__ == '__main__':
- *     p = Pychronus('./','redis')             # <<<<<<<<<<<<<<
- *     p.save('hoge', 'test_data')
- *     print(p.load('test_data'))
- */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_Pychronus); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_p, __pyx_t_2) < 0) __PYX_ERR(0, 82, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "pychronus.py":83
- * if __name__ == '__main__':
- *     p = Pychronus('./','redis')
- *     p.save('hoge', 'test_data')             # <<<<<<<<<<<<<<
- *     print(p.load('test_data'))
- */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_save); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "pychronus.py":84
- *     p = Pychronus('./','redis')
- *     p.save('hoge', 'test_data')
- *     print(p.load('test_data'))             # <<<<<<<<<<<<<<
- */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_load); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 84, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "pychronus.py":81
- *         self.save(data, dataname)
- * 
- * if __name__ == '__main__':             # <<<<<<<<<<<<<<
- *     p = Pychronus('./','redis')
- *     p.save('hoge', 'test_data')
- */
-  }
-
-  /* "pychronus.py":1
+  /* "src/data_places.py":1
  * # coding: utf-8             # <<<<<<<<<<<<<<
  * import redis
- * import pickle
+ * 
  */
   __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -4353,13 +3410,15 @@ static int __pyx_pymod_exec_pychronus(PyObject *__pyx_pyinit_module)
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init pychronus", 0, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init pychronus.data_places", 0, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init pychronus");
+    PyErr_SetString(PyExc_ImportError, "init pychronus.data_places");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -4546,26 +3605,51 @@ bad:
     return -1;
 }
 
-/* GetModuleGlobalName */
-static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name) {
+/* PyObjectCall */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
     PyObject *result;
-#if !CYTHON_AVOID_BORROWED_REFS
-    result = PyDict_GetItem(__pyx_d, name);
-    if (likely(result)) {
-        Py_INCREF(result);
-    } else {
-#else
-    result = PyObject_GetItem(__pyx_d, name);
-    if (!result) {
-        PyErr_Clear();
-#endif
-        result = __Pyx_GetBuiltinName(name);
+    ternaryfunc call = func->ob_type->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
     }
     return result;
 }
+#endif
+
+/* PyCFunctionFastCall */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
+    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
+    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
+    PyObject *self = PyCFunction_GET_SELF(func);
+    int flags = PyCFunction_GET_FLAGS(func);
+    assert(PyCFunction_Check(func));
+    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS)));
+    assert(nargs >= 0);
+    assert(nargs == 0 || args != NULL);
+    /* _PyCFunction_FastCallDict() must not be called with an exception set,
+       because it may clear it (directly or indirectly) and so the
+       caller loses its exception */
+    assert(!PyErr_Occurred());
+    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
+        return (*((__Pyx_PyCFunctionFastWithKeywords)meth)) (self, args, nargs, NULL);
+    } else {
+        return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs);
+    }
+}
+#endif
 
 /* PyFunctionFastCall */
-  #if CYTHON_FAST_PYCALL
+#if CYTHON_FAST_PYCALL
 #include "frameobject.h"
 static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
                                                PyObject *globals) {
@@ -4684,51 +3768,8 @@ done:
 #endif
 #endif
 
-/* PyCFunctionFastCall */
-  #if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
-    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
-    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
-    PyObject *self = PyCFunction_GET_SELF(func);
-    int flags = PyCFunction_GET_FLAGS(func);
-    assert(PyCFunction_Check(func));
-    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS)));
-    assert(nargs >= 0);
-    assert(nargs == 0 || args != NULL);
-    /* _PyCFunction_FastCallDict() must not be called with an exception set,
-       because it may clear it (directly or indirectly) and so the
-       caller loses its exception */
-    assert(!PyErr_Occurred());
-    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
-        return (*((__Pyx_PyCFunctionFastWithKeywords)meth)) (self, args, nargs, NULL);
-    } else {
-        return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs);
-    }
-}
-#endif
-
-/* PyObjectCall */
-  #if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = func->ob_type->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
 /* PyObjectCallMethO */
-  #if CYTHON_COMPILING_IN_CPYTHON
+#if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
     PyObject *self, *result;
     PyCFunction cfunc;
@@ -4748,7 +3789,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject
 #endif
 
 /* PyObjectCallOneArg */
-  #if CYTHON_COMPILING_IN_CPYTHON
+#if CYTHON_COMPILING_IN_CPYTHON
 static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
     PyObject *result;
     PyObject *args = PyTuple_New(1);
@@ -4787,337 +3828,8 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 }
 #endif
 
-/* PyErrFetchRestore */
-  #if CYTHON_FAST_THREAD_STATE
-static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
-    PyObject *tmp_type, *tmp_value, *tmp_tb;
-    tmp_type = tstate->curexc_type;
-    tmp_value = tstate->curexc_value;
-    tmp_tb = tstate->curexc_traceback;
-    tstate->curexc_type = type;
-    tstate->curexc_value = value;
-    tstate->curexc_traceback = tb;
-    Py_XDECREF(tmp_type);
-    Py_XDECREF(tmp_value);
-    Py_XDECREF(tmp_tb);
-}
-static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
-    *type = tstate->curexc_type;
-    *value = tstate->curexc_value;
-    *tb = tstate->curexc_traceback;
-    tstate->curexc_type = 0;
-    tstate->curexc_value = 0;
-    tstate->curexc_traceback = 0;
-}
-#endif
-
-/* RaiseException */
-  #if PY_MAJOR_VERSION < 3
-static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb,
-                        CYTHON_UNUSED PyObject *cause) {
-    __Pyx_PyThreadState_declare
-    Py_XINCREF(type);
-    if (!value || value == Py_None)
-        value = NULL;
-    else
-        Py_INCREF(value);
-    if (!tb || tb == Py_None)
-        tb = NULL;
-    else {
-        Py_INCREF(tb);
-        if (!PyTraceBack_Check(tb)) {
-            PyErr_SetString(PyExc_TypeError,
-                "raise: arg 3 must be a traceback or None");
-            goto raise_error;
-        }
-    }
-    if (PyType_Check(type)) {
-#if CYTHON_COMPILING_IN_PYPY
-        if (!value) {
-            Py_INCREF(Py_None);
-            value = Py_None;
-        }
-#endif
-        PyErr_NormalizeException(&type, &value, &tb);
-    } else {
-        if (value) {
-            PyErr_SetString(PyExc_TypeError,
-                "instance exception may not have a separate value");
-            goto raise_error;
-        }
-        value = type;
-        type = (PyObject*) Py_TYPE(type);
-        Py_INCREF(type);
-        if (!PyType_IsSubtype((PyTypeObject *)type, (PyTypeObject *)PyExc_BaseException)) {
-            PyErr_SetString(PyExc_TypeError,
-                "raise: exception class must be a subclass of BaseException");
-            goto raise_error;
-        }
-    }
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrRestore(type, value, tb);
-    return;
-raise_error:
-    Py_XDECREF(value);
-    Py_XDECREF(type);
-    Py_XDECREF(tb);
-    return;
-}
-#else
-static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause) {
-    PyObject* owned_instance = NULL;
-    if (tb == Py_None) {
-        tb = 0;
-    } else if (tb && !PyTraceBack_Check(tb)) {
-        PyErr_SetString(PyExc_TypeError,
-            "raise: arg 3 must be a traceback or None");
-        goto bad;
-    }
-    if (value == Py_None)
-        value = 0;
-    if (PyExceptionInstance_Check(type)) {
-        if (value) {
-            PyErr_SetString(PyExc_TypeError,
-                "instance exception may not have a separate value");
-            goto bad;
-        }
-        value = type;
-        type = (PyObject*) Py_TYPE(value);
-    } else if (PyExceptionClass_Check(type)) {
-        PyObject *instance_class = NULL;
-        if (value && PyExceptionInstance_Check(value)) {
-            instance_class = (PyObject*) Py_TYPE(value);
-            if (instance_class != type) {
-                int is_subclass = PyObject_IsSubclass(instance_class, type);
-                if (!is_subclass) {
-                    instance_class = NULL;
-                } else if (unlikely(is_subclass == -1)) {
-                    goto bad;
-                } else {
-                    type = instance_class;
-                }
-            }
-        }
-        if (!instance_class) {
-            PyObject *args;
-            if (!value)
-                args = PyTuple_New(0);
-            else if (PyTuple_Check(value)) {
-                Py_INCREF(value);
-                args = value;
-            } else
-                args = PyTuple_Pack(1, value);
-            if (!args)
-                goto bad;
-            owned_instance = PyObject_Call(type, args, NULL);
-            Py_DECREF(args);
-            if (!owned_instance)
-                goto bad;
-            value = owned_instance;
-            if (!PyExceptionInstance_Check(value)) {
-                PyErr_Format(PyExc_TypeError,
-                             "calling %R should have returned an instance of "
-                             "BaseException, not %R",
-                             type, Py_TYPE(value));
-                goto bad;
-            }
-        }
-    } else {
-        PyErr_SetString(PyExc_TypeError,
-            "raise: exception class must be a subclass of BaseException");
-        goto bad;
-    }
-    if (cause) {
-        PyObject *fixed_cause;
-        if (cause == Py_None) {
-            fixed_cause = NULL;
-        } else if (PyExceptionClass_Check(cause)) {
-            fixed_cause = PyObject_CallObject(cause, NULL);
-            if (fixed_cause == NULL)
-                goto bad;
-        } else if (PyExceptionInstance_Check(cause)) {
-            fixed_cause = cause;
-            Py_INCREF(fixed_cause);
-        } else {
-            PyErr_SetString(PyExc_TypeError,
-                            "exception causes must derive from "
-                            "BaseException");
-            goto bad;
-        }
-        PyException_SetCause(value, fixed_cause);
-    }
-    PyErr_SetObject(type, value);
-    if (tb) {
-#if CYTHON_COMPILING_IN_PYPY
-        PyObject *tmp_type, *tmp_value, *tmp_tb;
-        PyErr_Fetch(&tmp_type, &tmp_value, &tmp_tb);
-        Py_INCREF(tb);
-        PyErr_Restore(tmp_type, tmp_value, tb);
-        Py_XDECREF(tmp_tb);
-#else
-        PyThreadState *tstate = __Pyx_PyThreadState_Current;
-        PyObject* tmp_tb = tstate->curexc_traceback;
-        if (tb != tmp_tb) {
-            Py_INCREF(tb);
-            tstate->curexc_traceback = tb;
-            Py_XDECREF(tmp_tb);
-        }
-#endif
-    }
-bad:
-    Py_XDECREF(owned_instance);
-    return;
-}
-#endif
-
-/* BytesEquals */
-  static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals) {
-#if CYTHON_COMPILING_IN_PYPY
-    return PyObject_RichCompareBool(s1, s2, equals);
-#else
-    if (s1 == s2) {
-        return (equals == Py_EQ);
-    } else if (PyBytes_CheckExact(s1) & PyBytes_CheckExact(s2)) {
-        const char *ps1, *ps2;
-        Py_ssize_t length = PyBytes_GET_SIZE(s1);
-        if (length != PyBytes_GET_SIZE(s2))
-            return (equals == Py_NE);
-        ps1 = PyBytes_AS_STRING(s1);
-        ps2 = PyBytes_AS_STRING(s2);
-        if (ps1[0] != ps2[0]) {
-            return (equals == Py_NE);
-        } else if (length == 1) {
-            return (equals == Py_EQ);
-        } else {
-            int result;
-#if CYTHON_USE_UNICODE_INTERNALS
-            Py_hash_t hash1, hash2;
-            hash1 = ((PyBytesObject*)s1)->ob_shash;
-            hash2 = ((PyBytesObject*)s2)->ob_shash;
-            if (hash1 != hash2 && hash1 != -1 && hash2 != -1) {
-                return (equals == Py_NE);
-            }
-#endif
-            result = memcmp(ps1, ps2, (size_t)length);
-            return (equals == Py_EQ) ? (result == 0) : (result != 0);
-        }
-    } else if ((s1 == Py_None) & PyBytes_CheckExact(s2)) {
-        return (equals == Py_NE);
-    } else if ((s2 == Py_None) & PyBytes_CheckExact(s1)) {
-        return (equals == Py_NE);
-    } else {
-        int result;
-        PyObject* py_result = PyObject_RichCompare(s1, s2, equals);
-        if (!py_result)
-            return -1;
-        result = __Pyx_PyObject_IsTrue(py_result);
-        Py_DECREF(py_result);
-        return result;
-    }
-#endif
-}
-
-/* UnicodeEquals */
-  static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals) {
-#if CYTHON_COMPILING_IN_PYPY
-    return PyObject_RichCompareBool(s1, s2, equals);
-#else
-#if PY_MAJOR_VERSION < 3
-    PyObject* owned_ref = NULL;
-#endif
-    int s1_is_unicode, s2_is_unicode;
-    if (s1 == s2) {
-        goto return_eq;
-    }
-    s1_is_unicode = PyUnicode_CheckExact(s1);
-    s2_is_unicode = PyUnicode_CheckExact(s2);
-#if PY_MAJOR_VERSION < 3
-    if ((s1_is_unicode & (!s2_is_unicode)) && PyString_CheckExact(s2)) {
-        owned_ref = PyUnicode_FromObject(s2);
-        if (unlikely(!owned_ref))
-            return -1;
-        s2 = owned_ref;
-        s2_is_unicode = 1;
-    } else if ((s2_is_unicode & (!s1_is_unicode)) && PyString_CheckExact(s1)) {
-        owned_ref = PyUnicode_FromObject(s1);
-        if (unlikely(!owned_ref))
-            return -1;
-        s1 = owned_ref;
-        s1_is_unicode = 1;
-    } else if (((!s2_is_unicode) & (!s1_is_unicode))) {
-        return __Pyx_PyBytes_Equals(s1, s2, equals);
-    }
-#endif
-    if (s1_is_unicode & s2_is_unicode) {
-        Py_ssize_t length;
-        int kind;
-        void *data1, *data2;
-        if (unlikely(__Pyx_PyUnicode_READY(s1) < 0) || unlikely(__Pyx_PyUnicode_READY(s2) < 0))
-            return -1;
-        length = __Pyx_PyUnicode_GET_LENGTH(s1);
-        if (length != __Pyx_PyUnicode_GET_LENGTH(s2)) {
-            goto return_ne;
-        }
-#if CYTHON_USE_UNICODE_INTERNALS
-        {
-            Py_hash_t hash1, hash2;
-        #if CYTHON_PEP393_ENABLED
-            hash1 = ((PyASCIIObject*)s1)->hash;
-            hash2 = ((PyASCIIObject*)s2)->hash;
-        #else
-            hash1 = ((PyUnicodeObject*)s1)->hash;
-            hash2 = ((PyUnicodeObject*)s2)->hash;
-        #endif
-            if (hash1 != hash2 && hash1 != -1 && hash2 != -1) {
-                goto return_ne;
-            }
-        }
-#endif
-        kind = __Pyx_PyUnicode_KIND(s1);
-        if (kind != __Pyx_PyUnicode_KIND(s2)) {
-            goto return_ne;
-        }
-        data1 = __Pyx_PyUnicode_DATA(s1);
-        data2 = __Pyx_PyUnicode_DATA(s2);
-        if (__Pyx_PyUnicode_READ(kind, data1, 0) != __Pyx_PyUnicode_READ(kind, data2, 0)) {
-            goto return_ne;
-        } else if (length == 1) {
-            goto return_eq;
-        } else {
-            int result = memcmp(data1, data2, (size_t)(length * kind));
-            #if PY_MAJOR_VERSION < 3
-            Py_XDECREF(owned_ref);
-            #endif
-            return (equals == Py_EQ) ? (result == 0) : (result != 0);
-        }
-    } else if ((s1 == Py_None) & s2_is_unicode) {
-        goto return_ne;
-    } else if ((s2 == Py_None) & s1_is_unicode) {
-        goto return_ne;
-    } else {
-        int result;
-        PyObject* py_result = PyObject_RichCompare(s1, s2, equals);
-        if (!py_result)
-            return -1;
-        result = __Pyx_PyObject_IsTrue(py_result);
-        Py_DECREF(py_result);
-        return result;
-    }
-return_eq:
-    #if PY_MAJOR_VERSION < 3
-    Py_XDECREF(owned_ref);
-    #endif
-    return (equals == Py_EQ);
-return_ne:
-    #if PY_MAJOR_VERSION < 3
-    Py_XDECREF(owned_ref);
-    #endif
-    return (equals == Py_NE);
-#endif
-}
-
 /* PyObjectCallNoArg */
-  #if CYTHON_COMPILING_IN_CPYTHON
+#if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(func)) {
@@ -5138,7 +3850,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 #endif
 
 /* SaveResetException */
-    #if CYTHON_FAST_THREAD_STATE
+  #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx__ExceptionSave(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
     #if PY_VERSION_HEX >= 0x030700A2
     *type = tstate->exc_state.exc_type;
@@ -5177,7 +3889,7 @@ static CYTHON_INLINE void __Pyx__ExceptionReset(PyThreadState *tstate, PyObject 
 #endif
 
 /* GetException */
-    #if CYTHON_FAST_THREAD_STATE
+  #if CYTHON_FAST_THREAD_STATE
 static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
 #else
 static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb) {
@@ -5244,6 +3956,48 @@ bad:
     Py_XDECREF(local_value);
     Py_XDECREF(local_tb);
     return -1;
+}
+
+/* PyErrFetchRestore */
+    #if CYTHON_FAST_THREAD_STATE
+static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    tmp_type = tstate->curexc_type;
+    tmp_value = tstate->curexc_value;
+    tmp_tb = tstate->curexc_traceback;
+    tstate->curexc_type = type;
+    tstate->curexc_value = value;
+    tstate->curexc_traceback = tb;
+    Py_XDECREF(tmp_type);
+    Py_XDECREF(tmp_value);
+    Py_XDECREF(tmp_tb);
+}
+static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
+    *type = tstate->curexc_type;
+    *value = tstate->curexc_value;
+    *tb = tstate->curexc_traceback;
+    tstate->curexc_type = 0;
+    tstate->curexc_value = 0;
+    tstate->curexc_traceback = 0;
+}
+#endif
+
+/* GetModuleGlobalName */
+    static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name) {
+    PyObject *result;
+#if !CYTHON_AVOID_BORROWED_REFS
+    result = PyDict_GetItem(__pyx_d, name);
+    if (likely(result)) {
+        Py_INCREF(result);
+    } else {
+#else
+    result = PyObject_GetItem(__pyx_d, name);
+    if (!result) {
+        PyErr_Clear();
+#endif
+        result = __Pyx_GetBuiltinName(name);
+    }
+    return result;
 }
 
 /* Import */
@@ -6250,149 +5004,6 @@ bad:
     Py_XDECREF(py_code);
     Py_XDECREF(py_frame);
 }
-
-/* Print */
-          #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
-static PyObject *__Pyx_GetStdout(void) {
-    PyObject *f = PySys_GetObject((char *)"stdout");
-    if (!f) {
-        PyErr_SetString(PyExc_RuntimeError, "lost sys.stdout");
-    }
-    return f;
-}
-static int __Pyx_Print(PyObject* f, PyObject *arg_tuple, int newline) {
-    int i;
-    if (!f) {
-        if (!(f = __Pyx_GetStdout()))
-            return -1;
-    }
-    Py_INCREF(f);
-    for (i=0; i < PyTuple_GET_SIZE(arg_tuple); i++) {
-        PyObject* v;
-        if (PyFile_SoftSpace(f, 1)) {
-            if (PyFile_WriteString(" ", f) < 0)
-                goto error;
-        }
-        v = PyTuple_GET_ITEM(arg_tuple, i);
-        if (PyFile_WriteObject(v, f, Py_PRINT_RAW) < 0)
-            goto error;
-        if (PyString_Check(v)) {
-            char *s = PyString_AsString(v);
-            Py_ssize_t len = PyString_Size(v);
-            if (len > 0) {
-                switch (s[len-1]) {
-                    case ' ': break;
-                    case '\f': case '\r': case '\n': case '\t': case '\v':
-                        PyFile_SoftSpace(f, 0);
-                        break;
-                    default:  break;
-                }
-            }
-        }
-    }
-    if (newline) {
-        if (PyFile_WriteString("\n", f) < 0)
-            goto error;
-        PyFile_SoftSpace(f, 0);
-    }
-    Py_DECREF(f);
-    return 0;
-error:
-    Py_DECREF(f);
-    return -1;
-}
-#else
-static int __Pyx_Print(PyObject* stream, PyObject *arg_tuple, int newline) {
-    PyObject* kwargs = 0;
-    PyObject* result = 0;
-    PyObject* end_string;
-    if (unlikely(!__pyx_print)) {
-        __pyx_print = PyObject_GetAttr(__pyx_b, __pyx_n_s_print);
-        if (!__pyx_print)
-            return -1;
-    }
-    if (stream) {
-        kwargs = PyDict_New();
-        if (unlikely(!kwargs))
-            return -1;
-        if (unlikely(PyDict_SetItem(kwargs, __pyx_n_s_file, stream) < 0))
-            goto bad;
-        if (!newline) {
-            end_string = PyUnicode_FromStringAndSize(" ", 1);
-            if (unlikely(!end_string))
-                goto bad;
-            if (PyDict_SetItem(kwargs, __pyx_n_s_end, end_string) < 0) {
-                Py_DECREF(end_string);
-                goto bad;
-            }
-            Py_DECREF(end_string);
-        }
-    } else if (!newline) {
-        if (unlikely(!__pyx_print_kwargs)) {
-            __pyx_print_kwargs = PyDict_New();
-            if (unlikely(!__pyx_print_kwargs))
-                return -1;
-            end_string = PyUnicode_FromStringAndSize(" ", 1);
-            if (unlikely(!end_string))
-                return -1;
-            if (PyDict_SetItem(__pyx_print_kwargs, __pyx_n_s_end, end_string) < 0) {
-                Py_DECREF(end_string);
-                return -1;
-            }
-            Py_DECREF(end_string);
-        }
-        kwargs = __pyx_print_kwargs;
-    }
-    result = PyObject_Call(__pyx_print, arg_tuple, kwargs);
-    if (unlikely(kwargs) && (kwargs != __pyx_print_kwargs))
-        Py_DECREF(kwargs);
-    if (!result)
-        return -1;
-    Py_DECREF(result);
-    return 0;
-bad:
-    if (kwargs != __pyx_print_kwargs)
-        Py_XDECREF(kwargs);
-    return -1;
-}
-#endif
-
-/* PrintOne */
-          #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
-static int __Pyx_PrintOne(PyObject* f, PyObject *o) {
-    if (!f) {
-        if (!(f = __Pyx_GetStdout()))
-            return -1;
-    }
-    Py_INCREF(f);
-    if (PyFile_SoftSpace(f, 0)) {
-        if (PyFile_WriteString(" ", f) < 0)
-            goto error;
-    }
-    if (PyFile_WriteObject(o, f, Py_PRINT_RAW) < 0)
-        goto error;
-    if (PyFile_WriteString("\n", f) < 0)
-        goto error;
-    Py_DECREF(f);
-    return 0;
-error:
-    Py_DECREF(f);
-    return -1;
-    /* the line below is just to avoid C compiler
-     * warnings about unused functions */
-    return __Pyx_Print(f, NULL, 0);
-}
-#else
-static int __Pyx_PrintOne(PyObject* stream, PyObject *o) {
-    int res;
-    PyObject* arg_tuple = PyTuple_Pack(1, o);
-    if (unlikely(!arg_tuple))
-        return -1;
-    res = __Pyx_Print(stream, arg_tuple, 1);
-    Py_DECREF(arg_tuple);
-    return res;
-}
-#endif
 
 /* CIntToPy */
           static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
